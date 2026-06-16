@@ -1,5 +1,6 @@
 import { faqItems } from "@/app/waterfall-calculator/_data/faq";
 import { absoluteUrl, waterfallSite } from "@/app/waterfall-calculator/_data/site";
+import { SITE_LAST_MODIFIED } from "@/app/seo";
 
 export function softwareApplicationJsonLd() {
   return {
@@ -13,6 +14,7 @@ export function softwareApplicationJsonLd() {
     url: absoluteUrl(waterfallSite.route),
     image: absoluteUrl(waterfallSite.image),
     description: waterfallSite.description,
+    dateModified: SITE_LAST_MODIFIED,
     featureList: [
       "Standard whole-fund LP-first waterfall modeling",
       "Return of capital tier",
@@ -59,12 +61,53 @@ export function softwareApplicationJsonLd() {
   };
 }
 
+export function waterfallProductWebPageJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${absoluteUrl(waterfallSite.route)}/#webpage`,
+    url: absoluteUrl(waterfallSite.route),
+    name: "Waterfall Calculator",
+    description: waterfallSite.description,
+    dateModified: SITE_LAST_MODIFIED,
+    isPartOf: {
+      "@id": `${waterfallSite.siteUrl}/#website`
+    },
+    about: {
+      "@id": `${absoluteUrl(waterfallSite.route)}/#software-application`
+    },
+    publisher: {
+      "@id": `${waterfallSite.siteUrl}/#clearlysimple`
+    }
+  };
+}
+
+export function waterfallProductFaqJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${absoluteUrl(waterfallSite.route)}/#faq`,
+    url: absoluteUrl(waterfallSite.route),
+    name: "Waterfall Calculator product FAQ",
+    dateModified: SITE_LAST_MODIFIED,
+    mainEntity: faqItems.slice(0, 6).map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer
+      }
+    }))
+  };
+}
+
 export function faqJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "@id": `${absoluteUrl(waterfallSite.faqRoute)}/#faq`,
     name: "Waterfall Calculator FAQ",
+    dateModified: SITE_LAST_MODIFIED,
     mainEntity: faqItems.map((item) => ({
       "@type": "Question",
       name: item.question,
@@ -83,7 +126,7 @@ export function privacyPolicyJsonLd() {
     "@id": `${absoluteUrl(waterfallSite.privacyRoute)}/#privacy-policy`,
     name: "Waterfall Calculator Privacy Policy",
     url: absoluteUrl(waterfallSite.privacyRoute),
-    dateModified: "2026-06-14",
+    dateModified: SITE_LAST_MODIFIED,
     publisher: {
       "@type": "Organization",
       name: "ClearlySimple",

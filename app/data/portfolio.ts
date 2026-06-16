@@ -64,6 +64,34 @@ export const serviceSignals = [
   "Enterprise-grade delivery habits"
 ];
 
+export const homeFaqItems = [
+  {
+    question: "What kind of apps does ClearlySimple build?",
+    answer:
+      "ClearlySimple builds mobile apps, fintech utilities, consumer products, launch websites, dashboards, automations, and AI-assisted product systems with a focus on fast execution and polished user experience."
+  },
+  {
+    question: "Can I hire Ayush Mishra for mobile app development?",
+    answer:
+      "Yes. Ayush Mishra is available for app development work through ClearlySimple, especially projects that need React Native, Expo, native Kotlin, Swift, Firebase, RevenueCat, and launch-ready product engineering."
+  },
+  {
+    question: "Does ClearlySimple work with international clients?",
+    answer:
+      "Yes. ClearlySimple supports international projects across time zones with clear scopes, direct communication, fast iterations, and delivery habits suited for founders, operators, and premium clients."
+  },
+  {
+    question: "What makes ClearlySimple different from a typical freelance developer?",
+    answer:
+      "ClearlySimple combines product strategy, interface design, AI-assisted development workflows, mobile engineering, monetization systems, and launch execution instead of treating development as isolated code delivery."
+  },
+  {
+    question: "Which products has ClearlySimple built?",
+    answer:
+      "The portfolio currently includes Petal Chan, an offline period tracker, and Waterfall Calculator, an iOS-first finance utility for private equity waterfall modeling."
+  }
+] as const;
+
 export type PriorityRegion = {
   name: string;
   mapShape:

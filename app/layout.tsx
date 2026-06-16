@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
+import { SITE_LAST_MODIFIED, SITE_URL } from "@/app/seo";
 import "./globals.css";
 
 const display = Space_Grotesk({
@@ -8,7 +9,7 @@ const display = Space_Grotesk({
   display: "swap"
 });
 
-const siteUrl = "https://clearlysimple.apps";
+const siteUrl = SITE_URL;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -123,7 +124,7 @@ const jsonLd = [
       "Melbourne",
       "Australia"
     ],
-    sameAs: ["https://petalchan.com"]
+    sameAs: ["https://petalchan.com", `${siteUrl}/waterfall-calculator`]
   },
   {
     "@context": "https://schema.org",
@@ -179,7 +180,8 @@ const jsonLd = [
     author: {
       "@id": `${siteUrl}/#ayush-mishra`
     },
-    inLanguage: "en"
+    inLanguage: "en",
+    dateModified: SITE_LAST_MODIFIED
   }
 ];
 

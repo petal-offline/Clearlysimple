@@ -27,7 +27,11 @@ import {
   waterfallSeoKeywords,
   waterfallSite
 } from "@/app/waterfall-calculator/_data/site";
-import { softwareApplicationJsonLd } from "@/app/waterfall-calculator/_lib/schema";
+import {
+  softwareApplicationJsonLd,
+  waterfallProductFaqJsonLd,
+  waterfallProductWebPageJsonLd
+} from "@/app/waterfall-calculator/_lib/schema";
 
 export const metadata: Metadata = {
   title: "Waterfall Calculator | Private Equity Waterfall Math On iOS",
@@ -122,7 +126,13 @@ function JsonLd() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationJsonLd()) }}
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify([
+          softwareApplicationJsonLd(),
+          waterfallProductWebPageJsonLd(),
+          waterfallProductFaqJsonLd()
+        ])
+      }}
     />
   );
 }
