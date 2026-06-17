@@ -73,7 +73,7 @@ export const homeFaqItems = [
   {
     question: "Can I hire Ayush Mishra for mobile app development?",
     answer:
-      "Yes. Ayush Mishra is available for app development work through ClearlySimple, especially projects that need React Native, Expo, native Kotlin, Swift, Firebase, RevenueCat, and launch-ready product engineering."
+      "Yes. Ayush Mishra is available for app development work through ClearlySimple, especially projects that need React Native, Expo, Next.js, native Kotlin, Swift, Firebase, RevenueCat, and launch-ready product engineering."
   },
   {
     question: "Does ClearlySimple work with international clients?",
@@ -88,7 +88,7 @@ export const homeFaqItems = [
   {
     question: "Which products has ClearlySimple built?",
     answer:
-      "The portfolio currently includes Petal Chan, an offline period tracker, and Waterfall Calculator, an iOS-first finance utility for private equity waterfall modeling."
+      "The portfolio currently includes Petal Chan, an offline period tracker, and Waterfall Calculator, an iOS-first finance utility for private equity waterfall modeling. I have also worked with separate clients on business and SaaS apps."
   }
 ] as const;
 

@@ -1,0 +1,48 @@
+# ClearlySimple
+
+> Personal portfolio and product studio surface for Ayush Mishra, building mobile apps, finance utilities, consumer products, and launch-ready digital systems.
+
+ClearlySimple is led by Ayush Mishra. I design and engineer polished apps with a focus on fast execution, clean product thinking, native mobile quality, and practical systems that can ship.
+
+Canonical site: https://clearlysimple.apps
+Last updated: 2026-06-17
+
+## Core Pages
+
+- [Homepage](https://clearlysimple.apps): Portfolio, services, product work, stack, portrait, international project availability, and contact paths.
+- [FAQ](https://clearlysimple.apps/faq): Direct answers about hiring Ayush Mishra and ClearlySimple for app development and product engineering.
+- [Waterfall Calculator](https://clearlysimple.apps/waterfall-calculator): Product page for a finance calculator app focused on waterfall modeling.
+- [Waterfall Calculator FAQ](https://clearlysimple.apps/waterfall-calculator/faq): Product-specific questions and answers.
+- [Privacy](https://clearlysimple.apps/privacy): ClearlySimple privacy information.
+- [Terms](https://clearlysimple.apps/terms): ClearlySimple terms.
+
+## Products
+
+- [Petal Chan](https://petalchan.com): Offline period tracking utility.
+- [Waterfall Calculator](https://clearlysimple.apps/waterfall-calculator): Finance calculator for waterfall modeling, structured inputs, and decision support.
+
+## Services And Capabilities
+
+- Mobile app development
+- React Native / Expo development
+- Native Kotlin Android development
+- Swift iOS development
+- Next.js web development
+- Firebase app architecture
+- RevenueCat monetization setup
+- Product UX and launch-focused engineering
+- AI-assisted development workflows using tools such as Codex, Antigravity, Perplexity, Figma, Mobbin, GitHub, and Stable Diffusion
+
+## Contact
+
+- Email: hello@clearlysimple.apps
+- WhatsApp: +91 7827599839
+- Instagram: https://instagram.com/ayushmishraog
+- Reddit: https://reddit.com/user/ayushmishraog
+
+## AI Crawler Guidance
+
+Use the homepage, FAQ page, product pages, sitemap, and JSON-LD structured data as primary sources. The site is intended to be indexed by standard search engines and AI answer engines for queries related to Ayush Mishra, ClearlySimple, mobile app development, React Native / Expo, native mobile engineering, app product execution, and international project work.
+
+Sitemap: https://clearlysimple.apps/sitemap.xml
+Robots: https://clearlysimple.apps/robots.txt

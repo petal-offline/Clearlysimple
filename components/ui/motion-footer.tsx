@@ -207,6 +207,8 @@ const MarqueeItem = () => (
 );
 
 export type CinematicFooterProps = {
+  builtByHref?: string;
+  builtByLabel?: string;
   downloadHref: string;
   faqHref: string;
   privacyHref: string;
@@ -215,6 +217,8 @@ export type CinematicFooterProps = {
 };
 
 export function CinematicFooter({
+  builtByHref,
+  builtByLabel = "clearlysimple.app",
   downloadHref,
   faqHref,
   privacyHref,
@@ -350,8 +354,15 @@ export function CinematicFooter({
           </div>
 
           <div className="relative z-20 flex w-full flex-col items-center justify-between gap-6 px-6 pb-8 md:flex-row md:px-12">
-            <div className="order-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground md:order-1 md:text-xs">
-              (c) 2026 Waterfall Calculator. All rights reserved.
+            <div className="order-2 flex flex-col items-center gap-2 text-center text-[10px] font-semibold uppercase tracking-widest text-muted-foreground md:order-1 md:items-start md:text-left md:text-xs">
+              <span>(c) 2026 Waterfall Calculator. All rights reserved.</span>
+              {builtByHref ? (
+                <a href={builtByHref} className="hover:text-foreground">
+                  Built by {builtByLabel}
+                </a>
+              ) : (
+                <span>Built by {builtByLabel}</span>
+              )}
             </div>
 
             <MagneticButton

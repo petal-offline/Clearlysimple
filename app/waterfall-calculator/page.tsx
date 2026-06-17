@@ -211,6 +211,23 @@ export default function WaterfallCalculatorPage() {
               surface for standard whole-fund LP-first scenario review, saved
               cases, local-first privacy, and quick LP/GP economics scanning.
             </p>
+            <p className="mt-6 max-w-xl text-sm font-black uppercase tracking-[0.14em] text-foreground/50">
+              From the developers of{" "}
+              <a
+                href={waterfallSite.petalChanUrl}
+                className="text-[#2f7d32] underline-offset-4 hover:underline"
+              >
+                {waterfallSite.petalChanName}
+              </a>
+              {" "}and developed by{" "}
+              <a
+                href={waterfallSite.developerUrl}
+                className="text-[#2f7d32] underline-offset-4 hover:underline"
+              >
+                {waterfallSite.developerName}
+              </a>
+              .
+            </p>
           </Reveal>
           <Reveal delay={0.08}>
             <AppPreview />

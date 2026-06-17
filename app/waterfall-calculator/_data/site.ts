@@ -9,6 +9,10 @@ export const waterfallSite = {
   supportEmail: "support@clearlysimple.apps",
   supportHref:
     "mailto:support@clearlysimple.apps?subject=Waterfall%20Calculator%20support",
+  developerName: "clearlysimple.app",
+  developerUrl: "https://clearlysimple.app",
+  petalChanName: "petalchan.com",
+  petalChanUrl: "https://petalchan.com",
   tagline: "Private equity waterfall math, without the spreadsheet drag.",
   description:
     "Waterfall Calculator is an iOS-first private equity waterfall calculator for standard whole-fund LP-first waterfall modeling, built for local-first scenario work without spreadsheets or cloud tools.",

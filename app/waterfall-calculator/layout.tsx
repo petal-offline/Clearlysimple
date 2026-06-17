@@ -32,6 +32,8 @@ export default function WaterfallCalculatorLayout({
         {children}
       </main>
       <CinematicFooter
+        builtByHref={waterfallSite.developerUrl}
+        builtByLabel={waterfallSite.developerName}
         downloadHref={waterfallSite.appStoreUrl}
         faqHref={waterfallSite.faqRoute}
         privacyHref={waterfallSite.privacyRoute}
