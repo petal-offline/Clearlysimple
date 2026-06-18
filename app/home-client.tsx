@@ -300,7 +300,7 @@ function Header() {
           ))}
         </div>
         <a
-          href="mailto:hello@clearlysimple.apps?subject=Build%20with%20Ayush"
+          href="mailto:hello@clearlysimple.app?subject=Build%20with%20Ayush"
           aria-label="Email Ayush Mishra"
           className="group relative hidden h-10 min-w-12 items-center justify-center gap-2 overflow-hidden border border-ink bg-ink px-4 text-sm font-bold text-paper transition-colors duration-150 md:inline-flex"
         >
@@ -551,7 +551,7 @@ function Hero() {
             About me
           </MotionLink>
           <MotionLink
-            href="mailto:hello@clearlysimple.apps?subject=Build%20with%20Ayush"
+            href="mailto:hello@clearlysimple.app?subject=Build%20with%20Ayush"
             aria-label="Hire Ayush Mishra for an app build"
             className="group relative col-span-2 inline-flex h-12 items-center justify-center gap-2 overflow-hidden border border-ink bg-ink px-5 font-bold text-paper transition-colors duration-150 md:col-span-1 md:shadow-hard-sm"
           >
@@ -1195,7 +1195,7 @@ function ClosingCta() {
             </h2>
           </div>
           <MotionLink
-            href="mailto:hello@clearlysimple.apps?subject=AI%20app%20development%20with%20Ayush%20Mishra"
+            href="mailto:hello@clearlysimple.app?subject=AI%20app%20development%20with%20Ayush%20Mishra"
             aria-label="Email ClearlySimple about AI app development"
             className="inline-flex h-14 w-full items-center justify-center gap-3 border border-paper bg-paper px-6 font-bold text-ink transition-transform duration-75 hover:-translate-y-1 sm:w-auto"
           >
@@ -1219,7 +1219,7 @@ const footerGroups = [
       },
       {
         title: "Email",
-        href: "mailto:hello@clearlysimple.apps",
+        href: "mailto:hello@clearlysimple.app",
         icon: Mail
       }
     ]

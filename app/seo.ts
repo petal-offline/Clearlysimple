@@ -1,4 +1,4 @@
-export const SITE_URL = "https://clearlysimple.apps";
+export const SITE_URL = "https://clearlysimple.app";
 
 export const SITE_LAST_MODIFIED =
   process.env.NEXT_PUBLIC_SITE_LAST_MODIFIED ?? new Date().toISOString();

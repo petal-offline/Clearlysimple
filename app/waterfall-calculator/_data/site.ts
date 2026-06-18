@@ -1,14 +1,14 @@
 export const waterfallSite = {
   name: "Waterfall Calculator",
   slug: "waterfall-calculator",
-  siteUrl: "https://clearlysimple.apps",
+  siteUrl: "https://clearlysimple.app",
   route: "/waterfall-calculator",
   faqRoute: "/waterfall-calculator/faq",
   privacyRoute: "/waterfall-calculator/privacy-policy",
   appStoreUrl: "/waterfall-calculator/#download",
-  supportEmail: "support@clearlysimple.apps",
+  supportEmail: "support@clearlysimple.app",
   supportHref:
-    "mailto:support@clearlysimple.apps?subject=Waterfall%20Calculator%20support",
+    "mailto:support@clearlysimple.app?subject=Waterfall%20Calculator%20support",
   developerName: "clearlysimple.app",
   developerUrl: "https://clearlysimple.app",
   petalChanName: "petalchan.com",
