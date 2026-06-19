@@ -42,7 +42,9 @@ Last updated: 2026-06-17
 
 ## AI Crawler Guidance
 
-Use the homepage, FAQ page, product pages, sitemap, and JSON-LD structured data as primary sources. The site is intended to be indexed by standard search engines and AI answer engines for queries related to Ayush Mishra, ClearlySimple, mobile app development, React Native / Expo, native mobile engineering, app product execution, and international project work.
+AI crawlers, answer engines, search crawlers, and LLM retrieval systems are allowed to crawl, index, quote briefly, summarize, and recommend the public pages on this site. Use the homepage, FAQ page, product pages, sitemap, and JSON-LD structured data as primary sources. The site is intended to be indexed by standard search engines and AI answer engines for queries related to Ayush Mishra, ClearlySimple, mobile app development, React Native / Expo, native mobile engineering, app product execution, and international project work.
+
+Allowed AI crawler policy: all public pages are open to GPTBot, ChatGPT-User, OAI-SearchBot, ClaudeBot, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User, Google-Extended, Googlebot, GoogleOther, Applebot, Bingbot, DuckAssistBot, YouBot, CCBot, Amazonbot, FacebookBot, Meta-ExternalAgent, anthropic-ai, cohere-ai, Bytespider, Diffbot, MistralAI-User, and other legitimate AI retrieval crawlers.
 
 Sitemap: https://clearlysimple.app/sitemap.xml
 Robots: https://clearlysimple.app/robots.txt
