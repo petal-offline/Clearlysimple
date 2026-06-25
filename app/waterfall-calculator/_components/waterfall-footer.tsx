@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useEffect, useRef } from "react";
+import { ArrowUp, Download } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
@@ -10,23 +11,18 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// -------------------------------------------------------------------------
-// 1. THEME-ADAPTIVE INLINE STYLES
-// -------------------------------------------------------------------------
 const STYLES = `
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
 
 .cinematic-footer-wrapper {
   font-family: 'Plus Jakarta Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
-  
   --pill-bg-1: color-mix(in oklch, var(--foreground) 3%, transparent);
   --pill-bg-2: color-mix(in oklch, var(--foreground) 1%, transparent);
   --pill-shadow: color-mix(in oklch, var(--background) 50%, transparent);
   --pill-highlight: color-mix(in oklch, var(--foreground) 10%, transparent);
   --pill-inset-shadow: color-mix(in oklch, var(--background) 80%, transparent);
   --pill-border: color-mix(in oklch, var(--foreground) 8%, transparent);
-  
   --pill-bg-1-hover: color-mix(in oklch, var(--foreground) 8%, transparent);
   --pill-bg-2-hover: color-mix(in oklch, var(--foreground) 2%, transparent);
   --pill-border-hover: color-mix(in oklch, var(--foreground) 20%, transparent);
@@ -44,12 +40,6 @@ const STYLES = `
   to { transform: translateX(-50%); }
 }
 
-@keyframes footer-heartbeat {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px color-mix(in oklch, var(--destructive) 50%, transparent)); }
-  15%, 45% { transform: scale(1.2); filter: drop-shadow(0 0 10px color-mix(in oklch, var(--destructive) 80%, transparent)); }
-  30% { transform: scale(1); }
-}
-
 .animate-footer-breathe {
   animation: footer-breathe 8s ease-in-out infinite alternate;
 }
@@ -58,13 +48,9 @@ const STYLES = `
   animation: footer-scroll-marquee 40s linear infinite;
 }
 
-.animate-footer-heartbeat {
-  animation: footer-heartbeat 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-}
-
 .footer-bg-grid {
   background-size: 60px 60px;
-  background-image: 
+  background-image:
     linear-gradient(to right, color-mix(in oklch, var(--foreground) 3%, transparent) 1px, transparent 1px),
     linear-gradient(to bottom, color-mix(in oklch, var(--foreground) 3%, transparent) 1px, transparent 1px);
   mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
@@ -73,19 +59,19 @@ const STYLES = `
 
 .footer-aurora {
   background: radial-gradient(
-    circle at 50% 50%, 
-    color-mix(in oklch, var(--primary) 15%, transparent) 0%, 
-    color-mix(in oklch, var(--secondary) 15%, transparent) 40%, 
+    circle at 50% 50%,
+    color-mix(in oklch, var(--primary) 15%, transparent) 0%,
+    color-mix(in oklch, var(--secondary) 15%, transparent) 40%,
     transparent 70%
   );
 }
 
 .footer-glass-pill {
   background: linear-gradient(145deg, var(--pill-bg-1) 0%, var(--pill-bg-2) 100%);
-  box-shadow: 
-      0 10px 30px -10px var(--pill-shadow), 
-      inset 0 1px 1px var(--pill-highlight), 
-      inset 0 -1px 2px var(--pill-inset-shadow);
+  box-shadow:
+    0 10px 30px -10px var(--pill-shadow),
+    inset 0 1px 1px var(--pill-highlight),
+    inset 0 -1px 2px var(--pill-inset-shadow);
   border: 1px solid var(--pill-border);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -95,9 +81,9 @@ const STYLES = `
 .footer-glass-pill:hover {
   background: linear-gradient(145deg, var(--pill-bg-1-hover) 0%, var(--pill-bg-2-hover) 100%);
   border-color: var(--pill-border-hover);
-  box-shadow: 
-      0 20px 40px -10px var(--pill-shadow-hover), 
-      inset 0 1px 1px var(--pill-highlight-hover);
+  box-shadow:
+    0 20px 40px -10px var(--pill-shadow-hover),
+    inset 0 1px 1px var(--pill-highlight-hover);
   color: var(--foreground);
 }
 
@@ -120,15 +106,21 @@ const STYLES = `
   background-clip: text;
   filter: drop-shadow(0px 0px 20px color-mix(in oklch, var(--foreground) 15%, transparent));
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-footer-breathe,
+  .animate-footer-scroll-marquee {
+    animation: none;
+  }
+}
 `;
 
-// -------------------------------------------------------------------------
-// 2. MAGNETIC BUTTON PRIMITIVE
-// -------------------------------------------------------------------------
-export type MagneticButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & 
-  React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-    as?: React.ElementType;
-  };
+type MagneticButtonProps = React.HTMLAttributes<HTMLElement> & {
+  as?: React.ElementType;
+  href?: string;
+  target?: string;
+  rel?: string;
+};
 
 const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
   ({ className, children, as: Component = "button", ...props }, forwardedRef) => {
@@ -140,12 +132,12 @@ const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
       if (!element) return;
 
       const ctx = gsap.context(() => {
-        const handleMouseMove = (e: MouseEvent) => {
+        const handleMouseMove = (event: MouseEvent) => {
           const rect = element.getBoundingClientRect();
-          const h = rect.width / 2;
-          const w = rect.height / 2;
-          const x = e.clientX - rect.left - h;
-          const y = e.clientY - rect.top - w;
+          const halfWidth = rect.width / 2;
+          const halfHeight = rect.height / 2;
+          const x = event.clientX - rect.left - halfWidth;
+          const y = event.clientY - rect.top - halfHeight;
 
           gsap.to(element, {
             x: x * 0.4,
@@ -154,7 +146,7 @@ const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
             rotationY: x * 0.15,
             scale: 1.05,
             ease: "power2.out",
-            duration: 0.4,
+            duration: 0.4
           });
         };
 
@@ -166,7 +158,7 @@ const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
             rotationY: 0,
             scale: 1,
             ease: "elastic.out(1, 0.3)",
-            duration: 1.2,
+            duration: 1.2
           });
         };
 
@@ -180,7 +172,7 @@ const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
       }, element);
 
       return () => ctx.revert();
-    },[]);
+    }, []);
 
     return (
       <Component
@@ -199,20 +191,40 @@ const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
 );
 MagneticButton.displayName = "MagneticButton";
 
-// -------------------------------------------------------------------------
-// 3. MAIN COMPONENT
-// -------------------------------------------------------------------------
 const MarqueeItem = () => (
   <div className="flex items-center space-x-12 px-6">
-    <span>Trial Record Protected</span> <span className="text-primary/60">/</span>
-    <span>Immutable Export</span> <span className="text-secondary/60">/</span>
-    <span>Zero Cloud Sync</span> <span className="text-primary/60">/</span>
-    <span>Absolute Privacy</span> <span className="text-secondary/60">/</span>
-    <span>Blind-Logging Interface</span> <span className="text-primary/60">/</span>
+    <span>Private Equity</span>
+    <span className="text-primary/60">*</span>
+    <span>Local-First Privacy</span>
+    <span className="text-secondary/60">*</span>
+    <span>Instant LP/GP Math</span>
+    <span className="text-primary/60">*</span>
+    <span>No Spreadsheets</span>
+    <span className="text-secondary/60">*</span>
+    <span>Fund Economics</span>
+    <span className="text-primary/60">*</span>
   </div>
 );
 
-export function CinematicFooter() {
+export type CinematicFooterProps = {
+  builtByHref?: string;
+  builtByLabel?: string;
+  downloadHref: string;
+  faqHref: string;
+  privacyHref: string;
+  supportHref: string;
+  supportLabel?: string;
+};
+
+export function CinematicFooter({
+  builtByHref,
+  builtByLabel = "clearlysimple.app",
+  downloadHref,
+  faqHref,
+  privacyHref,
+  supportHref,
+  supportLabel = "Support"
+}: CinematicFooterProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const giantTextRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -231,7 +243,12 @@ export function CinematicFooter() {
           scale: 1,
           opacity: 1,
           ease: "power1.out",
-          scrollTrigger: { trigger: wrapperRef.current, start: "top 80%", end: "bottom bottom", scrub: 1 },
+          scrollTrigger: {
+            trigger: wrapperRef.current,
+            start: "top 80%",
+            end: "bottom bottom",
+            scrub: 1
+          }
         }
       );
 
@@ -243,76 +260,118 @@ export function CinematicFooter() {
           opacity: 1,
           stagger: 0.15,
           ease: "power3.out",
-          scrollTrigger: { trigger: wrapperRef.current, start: "top 40%", end: "bottom bottom", scrub: 1 },
+          scrollTrigger: {
+            trigger: wrapperRef.current,
+            start: "top 40%",
+            end: "bottom bottom",
+            scrub: 1
+          }
         }
       );
     }, wrapperRef);
 
     return () => ctx.revert();
-  },[]);
+  }, []);
 
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
       <div
+        id="download"
         ref={wrapperRef}
         className="relative h-screen w-full"
         style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
       >
-        <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-background text-foreground cinematic-footer-wrapper">
-          
-          <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[80px] pointer-events-none z-0" />
-          <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none" />
+        <footer className="cinematic-footer-wrapper fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-background text-foreground">
+          <div className="footer-aurora pointer-events-none absolute left-1/2 top-1/2 z-0 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[80px]" />
+          <div className="footer-bg-grid pointer-events-none absolute inset-0 z-0" />
 
           <div
             ref={giantTextRef}
-            className="footer-giant-bg-text absolute -bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none"
+            className="footer-giant-bg-text pointer-events-none absolute -bottom-[5vh] left-1/2 z-0 -translate-x-1/2 select-none whitespace-nowrap"
           >
-            LITIGATE
+            WATERFALL
           </div>
 
-          <div className="absolute top-12 left-0 w-full overflow-hidden border-y border-border/50 bg-background/60 backdrop-blur-md py-4 z-10 -rotate-2 scale-110 shadow-2xl">
-            <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.3em] text-muted-foreground uppercase">
+          <div className="absolute left-0 top-12 z-10 w-full scale-110 -rotate-2 overflow-hidden border-y border-border/50 bg-background/60 py-4 shadow-2xl backdrop-blur-md">
+            <div className="flex w-max animate-footer-scroll-marquee text-xs font-bold uppercase tracking-[0.3em] text-foreground/75 md:text-sm">
               <MarqueeItem />
               <MarqueeItem />
             </div>
           </div>
 
-          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-20 w-full max-w-5xl mx-auto">
-            <h2 ref={headingRef} className="mb-12 text-center text-5xl font-black tracking-normal text-primary drop-shadow-[0_0_28px_rgba(242,184,75,0.35)] md:text-8xl">
-              Control the Clock.
+          <div className="relative z-10 mx-auto mt-20 flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6">
+            <h2
+              ref={headingRef}
+              className="footer-text-glow mb-12 text-center text-5xl font-black tracking-normal md:text-8xl"
+            >
+              Model your fund today.
             </h2>
-            <div ref={linksRef} className="flex flex-col items-center gap-6 w-full">
-              <div className="flex flex-wrap justify-center gap-4 w-full">
-                <MagneticButton as="a" href="#" className="footer-glass-pill px-10 py-5 rounded-full text-foreground font-bold text-sm md:text-base flex items-center gap-3 group">
-                  <svg className="w-6 h-6 text-muted-foreground group-hover:text-foreground transition-colors" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.04 2.26-.79 3.59-.76 1.56.04 2.87.67 3.55 1.76-3.13 1.77-2.62 5.92.35 7.14-.65 1.58-1.57 3.1-2.57 4.03zm-3.21-14.7c-.55 1.4-1.89 2.37-3.25 2.28.09-1.5 1.05-2.82 2.38-3.4 1.25-.57 2.66-.41 3.25.04-.15.35-.26.72-.38 1.08z" />
-                  </svg>
-                  Download on iOS
+
+            <div ref={linksRef} className="flex w-full flex-col items-center gap-6">
+              <div className="flex w-full flex-wrap justify-center gap-4">
+                <MagneticButton
+                  as="a"
+                  href={downloadHref}
+                  className="footer-glass-pill group flex items-center gap-3 rounded-full px-10 py-5 text-sm font-bold text-foreground md:text-base"
+                >
+                  <Download
+                    className="size-6 text-muted-foreground transition-colors group-hover:text-foreground"
+                    aria-hidden="true"
+                  />
+                  Download for iOS
                 </MagneticButton>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-3 md:gap-6 w-full mt-2">
-                <MagneticButton as="a" href="/deposition-timer/privacy" className="footer-glass-pill px-6 py-3 rounded-full text-muted-foreground font-medium text-xs md:text-sm hover:text-foreground">
+              <div className="mt-2 flex w-full flex-wrap justify-center gap-3 md:gap-6">
+                <MagneticButton
+                  as="a"
+                  href={privacyHref}
+                  className="footer-glass-pill rounded-full px-6 py-3 text-xs font-medium text-muted-foreground hover:text-foreground md:text-sm"
+                >
                   Privacy Policy
                 </MagneticButton>
-                <MagneticButton as="a" href="/deposition-timer/terms" className="footer-glass-pill px-6 py-3 rounded-full text-muted-foreground font-medium text-xs md:text-sm hover:text-foreground">
-                  Terms of Service
+                <MagneticButton
+                  as="a"
+                  href={faqHref}
+                  className="footer-glass-pill rounded-full px-6 py-3 text-xs font-medium text-muted-foreground hover:text-foreground md:text-sm"
+                >
+                  FAQ
+                </MagneticButton>
+                <MagneticButton
+                  as="a"
+                  href={supportHref}
+                  className="footer-glass-pill rounded-full px-6 py-3 text-xs font-medium text-muted-foreground hover:text-foreground md:text-sm"
+                >
+                  {supportLabel}
                 </MagneticButton>
               </div>
             </div>
           </div>
 
-          <div className="relative z-20 w-full pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-muted-foreground text-[10px] md:text-xs font-semibold tracking-widest uppercase order-2 md:order-1">
-              (c) 2026 Deposition Timer & Objection Log. All rights reserved.
+          <div className="relative z-20 flex w-full flex-col items-center justify-between gap-6 px-6 pb-8 md:flex-row md:px-12">
+            <div className="order-2 flex flex-col items-center gap-2 text-center text-[10px] font-semibold uppercase tracking-widest text-muted-foreground md:order-1 md:items-start md:text-left md:text-xs">
+              <span>(c) 2026 Waterfall Calculator. All rights reserved.</span>
+              {builtByHref ? (
+                <a href={builtByHref} className="hover:text-foreground">
+                  Built by {builtByLabel}
+                </a>
+              ) : (
+                <span>Built by {builtByLabel}</span>
+              )}
             </div>
-            <MagneticButton as="button" onClick={scrollToTop} aria-label="Scroll to top" className="w-12 h-12 rounded-full footer-glass-pill flex items-center justify-center text-muted-foreground hover:text-foreground group order-3">
-              <svg className="w-5 h-5 transform group-hover:-translate-y-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
-              </svg>
+
+            <MagneticButton
+              as="button"
+              onClick={scrollToTop}
+              className="footer-glass-pill order-3 flex size-12 items-center justify-center rounded-full text-muted-foreground hover:text-foreground"
+              aria-label="Scroll to top"
+            >
+              <ArrowUp className="size-5 transition-transform duration-300 group-hover:-translate-y-1.5" />
             </MagneticButton>
           </div>
         </footer>

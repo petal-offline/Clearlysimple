@@ -1,6 +1,6 @@
 "use client";
 
-import { Header } from "@/components/ui/header-2";
+import { Header } from "@/components/ui/site-header";
 import { cn } from "@/lib/utils";
 import { waterfallNavItems, waterfallSite } from "@/app/waterfall-calculator/_data/site";
 

@@ -39,6 +39,20 @@ export const portfolioApps: PortfolioApp[] = [
     stack: ["Finance", "Mobile UI/UX", "Codex + Antigravity", "Figma + RevenueCat"],
     signal: "Build pipeline",
     accent: "cobalt"
+  },
+  {
+    name: "Deposition Timer",
+    status: "Work in Progress",
+    href: "/deposition-timer",
+    description:
+      "Offline legal timer for deposition timekeeping, objection logging, and export-ready session records.",
+    summary:
+      "A focused legal tech utility built for litigators who need clear Rule 30 timing, fast objection capture, and local-first records.",
+    role: "Legal workflow utility",
+    stage: "Work in progress",
+    stack: ["Legal tech", "Mobile UI/UX", "Offline-first", "PDF + CSV export"],
+    signal: "Rule 30 workflow",
+    accent: "ember"
   }
 ];
 
@@ -88,7 +102,7 @@ export const homeFaqItems = [
   {
     question: "Which products has ClearlySimple built?",
     answer:
-      "The portfolio currently includes Petal Chan, an offline period tracker, and Waterfall Calculator, an iOS-first finance utility for private equity waterfall modeling. I have also worked with separate clients on business and SaaS apps."
+      "The portfolio currently includes Petal Chan, an offline period tracker, Waterfall Calculator, an iOS-first finance utility for private equity waterfall modeling, and Deposition Timer, a work-in-progress legal timekeeping utility. I have also worked with separate clients on business and SaaS apps."
   }
 ] as const;
 

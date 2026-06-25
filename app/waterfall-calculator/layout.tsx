@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { CinematicFooter } from "@/components/ui/motion-footer";
+import { CinematicFooter } from "@/app/waterfall-calculator/_components/waterfall-footer";
 import { absoluteUrl, waterfallSite } from "@/app/waterfall-calculator/_data/site";
 
 const inter = Inter({

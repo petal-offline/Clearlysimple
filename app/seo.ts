@@ -8,6 +8,9 @@ export const sitemapRoutes = [
   { path: "/faq", priority: 0.82 },
   { path: "/privacy", priority: 0.35 },
   { path: "/terms", priority: 0.35 },
+  { path: "/deposition-timer", priority: 0.94 },
+  { path: "/deposition-timer/privacy", priority: 0.5 },
+  { path: "/deposition-timer/terms", priority: 0.45 },
   { path: "/waterfall-calculator", priority: 0.92 },
   { path: "/waterfall-calculator/faq", priority: 0.78 },
   { path: "/waterfall-calculator/privacy-policy", priority: 0.5 }
