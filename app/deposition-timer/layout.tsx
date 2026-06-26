@@ -22,7 +22,8 @@ const depositionTheme = {
   "--secondary-foreground-rgb": "7 10 15",
   "--destructive-rgb": "248 89 89",
   "--destructive-foreground-rgb": "255 255 255",
-  "--muted-foreground-rgb": "150 163 176"
+  "--muted-foreground-rgb": "150 163 176",
+  fontFamily: "var(--font-deposition), Inter, system-ui, sans-serif"
 } as CSSProperties;
 
 export default function DepositionTimerLayout({
