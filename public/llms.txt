@@ -11,15 +11,14 @@ Last updated: 2026-06-17
 
 - [Homepage](https://clearlysimple.app): Portfolio, services, product work, stack, portrait, international project availability, and contact paths.
 - [FAQ](https://clearlysimple.app/faq): Direct answers about hiring Ayush Mishra and ClearlySimple for app development and product engineering.
-- [Waterfall Calculator](https://clearlysimple.app/waterfall-calculator): Product page for a finance calculator app focused on waterfall modeling.
-- [Waterfall Calculator FAQ](https://clearlysimple.app/waterfall-calculator/faq): Product-specific questions and answers.
 - [Privacy](https://clearlysimple.app/privacy): ClearlySimple privacy information.
 - [Terms](https://clearlysimple.app/terms): ClearlySimple terms.
 
 ## Products
 
 - [Petal Chan](https://petalchan.com): Offline period tracking utility.
-- [Waterfall Calculator](https://clearlysimple.app/waterfall-calculator): Finance calculator for waterfall modeling, structured inputs, and decision support.
+- [Deposition Timer](https://apps.apple.com/us/app/deposition-timer/id6784677621): Offline legal timer for deposition timekeeping, objection logging, and export-ready session records.
+- [KeepDM](https://apps.apple.com/us/app/keepdm-locally-save-chats/id6767604258): Private, offline viewer for Instagram data exports, with local encrypted storage, search, media browsing, and biometric protection.
 
 ## Services And Capabilities
 

@@ -27,31 +27,31 @@ export const portfolioApps: PortfolioApp[] = [
     accent: "signal"
   },
   {
-    name: "Waterfall Calculator",
-    status: "In Development / Coming Soon",
-    href: "/waterfall-calculator",
-    description:
-      "Finance calculator for clearer waterfall modeling, structured inputs, and reliable decision support.",
-    summary:
-      "A focused finance utility built for clean computation, high-trust interaction, and scalable release planning.",
-    role: "Finance utility architecture",
-    stage: "Coming soon",
-    stack: ["Finance", "Mobile UI/UX", "Codex + Antigravity", "Figma + RevenueCat"],
-    signal: "Build pipeline",
-    accent: "cobalt"
-  },
-  {
     name: "Deposition Timer",
-    status: "Work in Progress",
-    href: "/deposition-timer",
+    status: "Live",
+    href: "https://apps.apple.com/us/app/deposition-timer/id6784677621",
     description:
       "Offline legal timer for deposition timekeeping, objection logging, and export-ready session records.",
     summary:
-      "A focused legal tech utility built for litigators who need clear Rule 30 timing, fast objection capture, and local-first records.",
+      "A legal timekeeping utility for clear Rule 30 timing, fast objection capture, and local-first records.",
     role: "Legal workflow utility",
-    stage: "Work in progress",
+    stage: "Live product",
     stack: ["Legal tech", "Mobile UI/UX", "Offline-first", "PDF + CSV export"],
     signal: "Rule 30 workflow",
+    accent: "cobalt"
+  },
+  {
+    name: "KeepDM",
+    status: "Live",
+    href: "https://apps.apple.com/us/app/keepdm-locally-save-chats/id6767604258",
+    description:
+      "Private, offline access to Instagram message exports, photos, videos, and searchable chat history.",
+    summary:
+      "A local-first archive viewer that keeps Instagram export data encrypted, searchable, and entirely on-device.",
+    role: "Private chat archive",
+    stage: "Live product",
+    stack: ["Social utility", "Offline-first", "Smart search", "Face ID + Touch ID"],
+    signal: "Private archive",
     accent: "ember"
   }
 ];
@@ -102,7 +102,7 @@ export const homeFaqItems = [
   {
     question: "Which products has ClearlySimple built?",
     answer:
-      "The portfolio currently includes Petal Chan, an offline period tracker, Waterfall Calculator, an iOS-first finance utility for private equity waterfall modeling, and Deposition Timer, a work-in-progress legal timekeeping utility. I have also worked with separate clients on business and SaaS apps."
+      "The portfolio currently includes Petal Chan, an offline period tracker, Deposition Timer, a legal timekeeping utility for litigators, and KeepDM, a private offline viewer for Instagram data exports. I have also worked with separate clients on business and SaaS apps."
   }
 ] as const;
 

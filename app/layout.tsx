@@ -131,7 +131,11 @@ const jsonLd = [
       "Melbourne",
       "Australia"
     ],
-    sameAs: ["https://petalchan.com", `${siteUrl}/waterfall-calculator`]
+    sameAs: [
+      "https://petalchan.com",
+      "https://apps.apple.com/us/app/deposition-timer/id6784677621",
+      "https://apps.apple.com/us/app/keepdm-locally-save-chats/id6767604258"
+    ]
   },
   {
     "@context": "https://schema.org",

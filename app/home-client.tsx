@@ -796,7 +796,7 @@ function AppVisual({ app, compact = false }: { app: PortfolioApp; compact?: bool
               aria-label={`Open ${app.name}`}
               className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 border border-ink bg-ink px-4 text-sm font-bold text-paper transition-transform duration-75 hover:-translate-y-0.5 sm:w-auto"
             >
-              Open product
+              {app.name === "Petal Chan" ? "Open product" : "App Store"}
               <ExternalLink className="size-4" aria-hidden="true" />
             </MotionLink>
           ) : (
@@ -1233,8 +1233,13 @@ const footerGroups = [
         icon: ExternalLink
       },
       {
-        title: "Waterfall Calculator",
-        href: "/waterfall-calculator",
+        title: "Deposition Timer",
+        href: "https://apps.apple.com/us/app/deposition-timer/id6784677621",
+        icon: ExternalLink
+      },
+      {
+        title: "KeepDM",
+        href: "https://apps.apple.com/us/app/keepdm-locally-save-chats/id6767604258",
         icon: ExternalLink
       }
     ]
