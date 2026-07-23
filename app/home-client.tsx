@@ -504,18 +504,10 @@ function Hero() {
       <div className="relative mx-auto grid min-h-[calc(88svh-4rem)] max-w-7xl content-between px-5 pb-6 md:min-h-[calc(92svh-5rem)] md:px-8">
         <div className="grid gap-8">
           <div className="pt-10 md:pt-16">
-            <motion.p
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease }}
-              className="mb-6 inline-flex items-center gap-2 border border-ink bg-paper px-3 py-2 font-mono text-xs uppercase tracking-[0.22em]"
-            >
-              Ayush Mishra
-            </motion.p>
             <SplitHeadline text="Built to ship." />
             <p className="mt-6 max-w-3xl text-balance text-lg font-semibold leading-7 text-ink/78 sm:text-xl sm:leading-8 md:mt-8 md:text-3xl md:leading-10">
               <StaggeredWords
-                text="I design and engineer mobile products that feel intentional and durable—from private utilities to consumer apps and specialized workflows."
+                text="Launch-ready apps, websites, and product systems—designed with clarity and engineered to last."
                 delay={0.28}
                 stagger={0.012}
               />
@@ -550,7 +542,7 @@ function Hero() {
             className="group relative col-span-2 inline-flex h-12 items-center justify-center gap-2 overflow-hidden border border-ink bg-ink px-5 font-bold text-paper transition-colors duration-150 md:col-span-1 md:shadow-hard-sm"
           >
             <span className="absolute inset-0 -translate-x-full bg-signal transition-transform duration-100 ease-out group-hover:translate-x-0" aria-hidden="true" />
-            <span className="relative z-10 transition-colors duration-75 group-hover:text-ink">Hire me</span>
+            <span className="relative z-10 transition-colors duration-75 group-hover:text-ink">Let&apos;s build</span>
             <ArrowUpRight className="relative z-10 size-4 transition-colors duration-75 group-hover:text-ink" aria-hidden="true" />
           </MotionLink>
         </motion.div>
