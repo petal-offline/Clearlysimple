@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
   Check,
+  ChevronDown,
   CircleDollarSign,
   Clock3,
   FileText,
@@ -42,7 +43,7 @@ const projectIcon: Record<ProjectType, typeof Smartphone> = {
 };
 
 const fieldClassName =
-  "w-full border border-ink/25 bg-paper px-4 py-3.5 text-base text-ink outline-none transition placeholder:text-ink/40 focus:border-cobalt focus:ring-2 focus:ring-cobalt/15";
+  "w-full scroll-mt-24 border border-ink/25 bg-paper px-4 py-3.5 text-base text-ink outline-none transition placeholder:text-ink/40 focus:border-cobalt focus:ring-2 focus:ring-cobalt/15 sm:scroll-mt-28";
 // These are deliberately public values: they identify the Supabase project and
 // let the browser invoke the protected Edge Function. No privileged key is used
 // here; saving records and sending email happen exclusively in that function.
@@ -202,6 +203,8 @@ export function BuildQuestionnaire() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<QuestionnaireAnswers>(initialAnswers);
   const [isSessionReady, setIsSessionReady] = useState(false);
+  const [isOverviewExpanded, setIsOverviewExpanded] = useState(false);
+  const focusedFieldRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
   const [website, setWebsite] = useState("");
   const [submissionState, setSubmissionState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [submissionMessage, setSubmissionMessage] = useState("");
@@ -260,6 +263,21 @@ export function BuildQuestionnaire() {
     if (isSessionReady) window.scrollTo({ top: 0, behavior: "smooth" });
   }, [isSessionReady, step]);
 
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+
+    const keepFocusedFieldVisible = () => {
+      const focusedField = focusedFieldRef.current;
+      if (focusedField && document.activeElement === focusedField) {
+        window.setTimeout(() => focusedField.scrollIntoView({ behavior: "smooth", block: "start" }), 0);
+      }
+    };
+
+    viewport.addEventListener("resize", keepFocusedFieldVisible);
+    return () => viewport.removeEventListener("resize", keepFocusedFieldVisible);
+  }, []);
+
   const setValue = <Key extends keyof QuestionnaireAnswers>(key: Key, value: QuestionnaireAnswers[Key]) => {
     setAnswers((current) => ({ ...current, [key]: value }));
   };
@@ -310,6 +328,11 @@ export function BuildQuestionnaire() {
 
   const updateOutcomeFromSuggestion = (suggestion: string) => {
     setValue("outcome", answers.outcome.trim() ? `${answers.outcome.trim()} ${suggestion}` : suggestion);
+  };
+
+  const revealField = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    focusedFieldRef.current = event.currentTarget;
+    window.setTimeout(() => event.currentTarget.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
   };
 
   const submitBrief = async () => {
@@ -381,38 +404,67 @@ export function BuildQuestionnaire() {
                   className="mx-auto w-full max-w-4xl"
                 >
                   <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.2em] text-cobalt">Brief ready</p>
-                  <div className="mt-5 border border-ink/20 bg-paper p-6 sm:p-8">
-                    <p className="text-sm font-bold uppercase tracking-[0.15em] text-cobalt">A useful first conversation</p>
-                    <h1 className="mt-5 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.88] tracking-[-0.055em] sm:text-6xl">
-                      We have the shape of your project.
-                    </h1>
-                    <p className="mt-6 max-w-2xl text-base leading-7 text-ink/65 sm:text-lg">
-                      We will use this brief to prepare for a thoughtful, focused conversation about the clearest first release.
-                    </p>
-
-                    <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                      <div className="border border-ink/15 p-4">
-                        <p className="text-sm text-ink/50">Project</p>
-                        <p className="mt-1 font-bold">
-                          {projectTypes.find((item) => item.value === answers.projectType)?.label || "Still to define"}
-                        </p>
+                  <div className="mt-4 border border-ink/20 bg-paper p-5 sm:p-6">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h1 className="text-2xl font-bold tracking-[-0.04em] sm:text-3xl">Your brief is ready to send.</h1>
+                        <p className="mt-2 text-sm leading-6 text-ink/60">We have captured the essentials for a focused first conversation.</p>
                       </div>
-                      <div className="border border-ink/15 p-4">
-                        <p className="text-sm text-ink/50">Who it is for</p>
-                        <p className="mt-1 font-bold">{answers.audience || "Still to define"}</p>
-                      </div>
-                      <div className="border border-ink/15 p-4">
-                        <p className="text-sm text-ink/50">First-release priorities</p>
-                        <p className="mt-1 font-bold">{answers.features.length} selected</p>
-                      </div>
-                      <div className="border border-ink/15 p-4">
-                        <p className="text-sm text-ink/50">Timing</p>
-                        <p className="mt-1 font-bold">{answers.timeline || "Still to define"}</p>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setIsOverviewExpanded((current) => !current)}
+                        aria-expanded={isOverviewExpanded}
+                        className="inline-flex min-h-10 shrink-0 items-center gap-1.5 border border-ink/20 bg-paper px-3 text-xs font-bold transition hover:border-cobalt hover:bg-signal/30"
+                      >
+                        {isOverviewExpanded ? "Hide overview" : "View overview"}
+                        <ChevronDown className={cn("size-4 transition-transform", isOverviewExpanded && "rotate-180")} aria-hidden="true" />
+                      </button>
                     </div>
+
+                    <dl className="mt-5 grid grid-cols-3 gap-3 text-xs">
+                      <div className="min-w-0 border-l border-ink/15 pl-3 first:border-l-0 first:pl-0">
+                        <dt className="text-ink/50">Project</dt>
+                        <dd className="mt-1 truncate font-bold">
+                          {projectTypes.find((item) => item.value === answers.projectType)?.label || "To define"}
+                        </dd>
+                      </div>
+                      <div className="min-w-0 border-l border-ink/15 pl-3">
+                        <dt className="text-ink/50">Priorities</dt>
+                        <dd className="mt-1 font-bold">{answers.features.length} selected</dd>
+                      </div>
+                      <div className="min-w-0 border-l border-ink/15 pl-3">
+                        <dt className="text-ink/50">Timing</dt>
+                        <dd className="mt-1 truncate font-bold">{answers.timeline || "To define"}</dd>
+                      </div>
+                    </dl>
+
+                    {isOverviewExpanded ? (
+                      <div className="mt-5 border-t border-ink/15 pt-5 text-sm leading-6">
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div>
+                            <p className="text-ink/50">Who it is for</p>
+                            <p className="mt-1 font-bold">{answers.audience || "To define"}</p>
+                          </div>
+                          <div>
+                            <p className="text-ink/50">What already exists</p>
+                            <p className="mt-1 font-bold">{answers.materials.join(", ") || "Starting fresh"}</p>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <p className="text-ink/50">Your idea</p>
+                            <p className="mt-1">{answers.idea}</p>
+                          </div>
+                          {answers.outcome ? (
+                            <div className="sm:col-span-2">
+                              <p className="text-ink/50">What success looks like</p>
+                              <p className="mt-1">{answers.outcome}</p>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
 
-                  <section className="mt-8 border border-ink/20 bg-signal/35 p-5 sm:p-6" aria-label="Send your project brief" aria-live="polite">
+                  <section className="mt-5 border border-ink/20 bg-signal/35 p-5 sm:p-6" aria-label="Send your project brief" aria-live="polite">
                     <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.16em] text-cobalt">
                       {submissionState === "sent" ? "Brief received" : briefDelivery.enabled ? "Ready when you are" : "Secure delivery in setup"}
                     </p>
@@ -505,6 +557,7 @@ export function BuildQuestionnaire() {
                       <textarea
                         value={answers.idea}
                         onChange={(event) => setValue("idea", event.target.value)}
+                        onFocus={revealField}
                         rows={6}
                         autoFocus
                         placeholder="For example: I want to make it simpler for…"
@@ -548,6 +601,7 @@ export function BuildQuestionnaire() {
                       <textarea
                         value={answers.outcome}
                         onChange={(event) => setValue("outcome", event.target.value)}
+                        onFocus={revealField}
                         rows={5}
                         autoFocus
                         placeholder="For example: Customers can finish a task without needing to email us…"
@@ -685,6 +739,7 @@ export function BuildQuestionnaire() {
                           <input
                             value={answers.fullName}
                             onChange={(event) => setValue("fullName", event.target.value)}
+                            onFocus={revealField}
                             autoComplete="name"
                             autoFocus
                             placeholder="Your name"
@@ -697,6 +752,7 @@ export function BuildQuestionnaire() {
                             type="email"
                             value={answers.email}
                             onChange={(event) => setValue("email", event.target.value)}
+                            onFocus={revealField}
                             autoComplete="email"
                             placeholder="you@company.com"
                             className={cn(fieldClassName, "mt-2")}
@@ -707,6 +763,7 @@ export function BuildQuestionnaire() {
                           <input
                             value={answers.company}
                             onChange={(event) => setValue("company", event.target.value)}
+                            onFocus={revealField}
                             autoComplete="organization"
                             placeholder="Company, studio, or project name"
                             className={cn(fieldClassName, "mt-2")}
@@ -719,6 +776,7 @@ export function BuildQuestionnaire() {
                             inputMode="tel"
                             value={answers.whatsappNumber}
                             onChange={(event) => setValue("whatsappNumber", event.target.value)}
+                            onFocus={revealField}
                             autoComplete="tel"
                             placeholder="Include country code, for example +1 555 123 4567"
                             className={cn(fieldClassName, "mt-2")}
@@ -758,8 +816,9 @@ export function BuildQuestionnaire() {
           </div>
 
         {!isComplete ? (
-            <div className="sticky bottom-0 z-20 border-t border-ink/15 bg-paper px-5 py-4 sm:px-10 lg:px-16">
-              <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
+            <div className="fixed inset-x-0 bottom-0 z-30 border-t border-ink/15 bg-paper px-5 py-4 sm:px-10">
+              <div className="mx-auto max-w-6xl">
+                <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
                 <button
                   type="button"
                   onClick={back}
@@ -779,6 +838,7 @@ export function BuildQuestionnaire() {
                   {step === QUESTION_COUNT - 1 ? "Review my brief" : "Continue"}
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </button>
+              </div>
               </div>
             </div>
           ) : null}
