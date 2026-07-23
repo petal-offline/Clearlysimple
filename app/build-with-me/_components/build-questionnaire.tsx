@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -21,7 +21,6 @@ import {
   budgetOptions,
   contactMethods,
   featureOptions,
-  getPlanningEstimate,
   initialAnswers,
   materialOptions,
   projectTypes,
@@ -32,6 +31,7 @@ import {
 } from "@/app/build-with-me/_data/questionnaire";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const sessionStorageKey = "clearlysimple-build-with-me";
 
 const projectIcon: Record<ProjectType, typeof Smartphone> = {
   "mobile-app": Smartphone,
@@ -60,6 +60,22 @@ type QuestionFrameProps = {
   detail: string;
   children: React.ReactNode;
 };
+
+type QuestionnaireHistoryState = {
+  clearlySimpleBuildWithMe?: boolean;
+  questionnaireStep?: number;
+  [key: string]: unknown;
+};
+
+function clampStep(value: number) {
+  return Math.max(0, Math.min(value, QUESTION_COUNT));
+}
+
+function buildHistoryState(step: number): QuestionnaireHistoryState {
+  const currentState = window.history.state;
+  const baseState = currentState && typeof currentState === "object" ? currentState : {};
+  return { ...baseState, clearlySimpleBuildWithMe: true, questionnaireStep: clampStep(step) };
+}
 
 function QuestionFrame({ number, eyebrow, title, detail, children }: QuestionFrameProps) {
   return (
@@ -103,15 +119,15 @@ function ToggleCard({
       className={cn(
         "group relative flex min-h-20 w-full items-center gap-4 border px-4 py-4 text-left transition duration-150 sm:px-5",
         active
-          ? "border-ink bg-ink text-paper shadow-hard-sm"
-          : "border-ink/20 bg-paper text-ink hover:border-ink hover:bg-signal/25"
+          ? "border-cobalt bg-signal/45 text-ink ring-1 ring-cobalt/20"
+          : "border-ink/20 bg-paper text-ink hover:border-cobalt hover:bg-signal/25"
       )}
     >
       {Icon ? (
         <span
           className={cn(
             "grid size-10 shrink-0 place-items-center border",
-            active ? "border-paper/25 bg-paper/10" : "border-ink/15 bg-signal/35"
+            active ? "border-cobalt/30 bg-paper/65" : "border-ink/15 bg-signal/35"
           )}
         >
           <Icon className="size-5" aria-hidden="true" />
@@ -120,7 +136,7 @@ function ToggleCard({
       <span className="min-w-0 flex-1">
         <span className="block text-base font-bold leading-tight">{label}</span>
         {description ? (
-          <span className={cn("mt-1 block text-sm leading-5", active ? "text-paper/65" : "text-ink/55")}>
+          <span className={cn("mt-1 block text-sm leading-5", active ? "text-ink/65" : "text-ink/55")}>
             {description}
           </span>
         ) : null}
@@ -128,7 +144,7 @@ function ToggleCard({
       <span
         className={cn(
           "grid size-5 shrink-0 place-items-center border",
-          active ? "border-signal bg-signal text-ink" : "border-ink/25 bg-paper"
+          active ? "border-cobalt bg-cobalt text-paper" : "border-ink/25 bg-paper"
         )}
         aria-hidden="true"
       >
@@ -145,7 +161,9 @@ function ChoicePill({ active, label, onClick }: { active: boolean; label: string
       onClick={onClick}
       className={cn(
         "min-h-12 border px-4 py-2.5 text-left text-sm font-bold leading-5 transition duration-150",
-        active ? "border-ink bg-ink text-paper" : "border-ink/20 bg-paper text-ink hover:border-ink hover:bg-signal/30"
+        active
+          ? "border-cobalt bg-signal/45 text-ink"
+          : "border-ink/20 bg-paper text-ink hover:border-cobalt hover:bg-signal/30"
       )}
     >
       {active ? <Check className="mr-2 inline size-3.5 align-[-2px]" aria-hidden="true" /> : null}
@@ -183,24 +201,64 @@ function SuggestionChips({
 export function BuildQuestionnaire() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<QuestionnaireAnswers>(initialAnswers);
-  const contentScrollRef = useRef<HTMLDivElement>(null);
+  const [isSessionReady, setIsSessionReady] = useState(false);
   const [website, setWebsite] = useState("");
   const [submissionState, setSubmissionState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [submissionMessage, setSubmissionMessage] = useState("");
 
-  useLayoutEffect(() => {
-    contentScrollRef.current?.scrollTo({ top: 0 });
-  }, [step]);
+  useEffect(() => {
+    let restoredStep = 0;
 
-  const planningEstimate = getPlanningEstimate(answers);
-  const budget = budgetOptions[answers.budgetIndex];
-  const estimate = {
-    label: planningEstimate.label,
-    scopeNote:
-      budget.value < planningEstimate.low
-        ? "Your selected budget points to a lean first release. We would help you identify the strongest essentials."
-        : "Your selected budget is a promising starting point for a focused first release."
-  };
+    try {
+      const saved = window.sessionStorage.getItem(sessionStorageKey);
+      if (saved) {
+        const parsed = JSON.parse(saved) as { answers?: Partial<QuestionnaireAnswers>; step?: unknown };
+        if (parsed.answers && typeof parsed.answers === "object") {
+          setAnswers({
+            ...initialAnswers,
+            ...parsed.answers,
+            features: Array.isArray(parsed.answers.features) ? parsed.answers.features : [],
+            materials: Array.isArray(parsed.answers.materials) ? parsed.answers.materials : []
+          });
+        }
+        if (typeof parsed.step === "number") restoredStep = clampStep(parsed.step);
+      }
+    } catch {
+      window.sessionStorage.removeItem(sessionStorageKey);
+    }
+
+    const currentState = window.history.state as QuestionnaireHistoryState | null;
+    if (currentState?.clearlySimpleBuildWithMe && typeof currentState.questionnaireStep === "number") {
+      restoredStep = clampStep(currentState.questionnaireStep);
+    }
+
+    window.history.replaceState(buildHistoryState(0), "", window.location.href);
+    for (let historyStep = 1; historyStep <= restoredStep; historyStep += 1) {
+      window.history.pushState(buildHistoryState(historyStep), "", window.location.href);
+    }
+
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state as QuestionnaireHistoryState | null;
+      if (state?.clearlySimpleBuildWithMe && typeof state.questionnaireStep === "number") {
+        setStep(clampStep(state.questionnaireStep));
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    setStep(restoredStep);
+    setIsSessionReady(true);
+
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  useEffect(() => {
+    if (!isSessionReady || submissionState === "sent") return;
+    window.sessionStorage.setItem(sessionStorageKey, JSON.stringify({ answers, step }));
+  }, [answers, isSessionReady, step, submissionState]);
+
+  useEffect(() => {
+    if (isSessionReady) window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [isSessionReady, step]);
 
   const setValue = <Key extends keyof QuestionnaireAnswers>(key: Key, value: QuestionnaireAnswers[Key]) => {
     setAnswers((current) => ({ ...current, [key]: value }));
@@ -221,7 +279,7 @@ export function BuildQuestionnaire() {
       case 0:
         return Boolean(answers.projectType);
       case 1:
-        return answers.idea.trim().length >= 12;
+        return answers.idea.trim().length > 0;
       case 2:
         return Boolean(answers.audience);
       case 4:
@@ -237,10 +295,14 @@ export function BuildQuestionnaire() {
 
   const next = () => {
     if (!canContinue()) return;
-    setStep((current) => Math.min(current + 1, QUESTION_COUNT));
+    const nextStep = Math.min(step + 1, QUESTION_COUNT);
+    setStep(nextStep);
+    window.history.pushState(buildHistoryState(nextStep), "", window.location.href);
   };
 
-  const back = () => setStep((current) => Math.max(current - 1, 0));
+  const back = () => {
+    if (step > 0) window.history.back();
+  };
 
   const updateIdeaFromSuggestion = (suggestion: string) => {
     setValue("idea", answers.idea.trim() ? `${answers.idea.trim()} ${suggestion}` : suggestion);
@@ -274,6 +336,7 @@ export function BuildQuestionnaire() {
 
       setSubmissionState("sent");
       setSubmissionMessage(payload?.message || "Your brief has been received. We will be in touch soon.");
+      window.sessionStorage.removeItem(sessionStorageKey);
     } catch (error) {
       setSubmissionState("error");
       setSubmissionMessage(error instanceof Error ? error.message : "We could not save your brief. Please try again.");
@@ -283,10 +346,10 @@ export function BuildQuestionnaire() {
   const isComplete = step === QUESTION_COUNT;
 
   return (
-    <main className="min-h-svh bg-paper px-3 py-3 text-ink sm:px-5 sm:py-5">
-      <div className="mx-auto flex h-[calc(100svh-1.5rem)] max-w-6xl flex-col overflow-hidden border border-ink/20 bg-paper shadow-hard-lg sm:h-[calc(100svh-2.5rem)]">
-        <div className="z-20 bg-paper/95 backdrop-blur">
-          <header className="flex items-center justify-between border-b border-ink/15 px-5 py-4 sm:px-7">
+    <main className="min-h-svh bg-paper text-ink">
+      <div className="mx-auto min-h-svh max-w-6xl border-x border-ink/15 bg-paper">
+        <div className="sticky top-0 z-20 border-b border-ink/15 bg-paper">
+          <header className="flex items-center justify-between px-5 py-4 sm:px-7">
             <Link href="/" className="text-sm font-bold uppercase tracking-[0.19em]" aria-label="Return to ClearlySimple home">
               ClearlySimple
             </Link>
@@ -307,8 +370,7 @@ export function BuildQuestionnaire() {
           ) : null}
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col bg-[radial-gradient(circle_at_92%_5%,rgba(168,220,255,0.72),transparent_22rem),linear-gradient(135deg,rgba(255,255,255,0.3),rgba(255,255,255,0))]">
-          <div ref={contentScrollRef} className="flex min-h-0 flex-1 items-start overflow-y-auto px-5 py-11 sm:px-10 sm:py-14 lg:px-16">
+        <div className="mx-auto w-full max-w-3xl px-5 pb-32 pt-10 sm:px-10 sm:pb-36 sm:pt-14 lg:px-16">
             <AnimatePresence mode="wait">
               {isComplete ? (
                 <motion.section
@@ -318,40 +380,36 @@ export function BuildQuestionnaire() {
                   transition={{ duration: 0.25 }}
                   className="mx-auto w-full max-w-4xl"
                 >
-                  <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.2em] text-cobalt">Your planning snapshot</p>
-                  <div className="mt-5 grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
-                    <div className="border border-ink bg-ink p-6 text-paper shadow-hard-sm sm:p-8">
-                      <p className="text-sm font-bold uppercase tracking-[0.15em] text-signal">A useful first conversation</p>
-                      <h1 className="mt-5 font-display text-4xl font-bold uppercase leading-[0.88] tracking-[-0.055em] sm:text-6xl">
-                        A preliminary planning range
-                      </h1>
-                      <div className="mt-8 border-y border-paper/20 py-5">
-                        <p className="font-mono text-xs uppercase tracking-[0.17em] text-paper/55">For the first release</p>
-                        <p className="mt-2 text-5xl font-bold tracking-[-0.06em] text-signal sm:text-6xl">{estimate.label}</p>
-                        <p className="mt-1 text-sm font-bold text-paper/65">USD · not a fixed quote</p>
-                      </div>
-                      <p className="mt-6 max-w-xl text-base leading-7 text-paper/78">{estimate.scopeNote}</p>
-                    </div>
+                  <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.2em] text-cobalt">Brief ready</p>
+                  <div className="mt-5 border border-ink/20 bg-paper p-6 sm:p-8">
+                    <p className="text-sm font-bold uppercase tracking-[0.15em] text-cobalt">A useful first conversation</p>
+                    <h1 className="mt-5 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.88] tracking-[-0.055em] sm:text-6xl">
+                      We have the shape of your project.
+                    </h1>
+                    <p className="mt-6 max-w-2xl text-base leading-7 text-ink/65 sm:text-lg">
+                      We will use this brief to prepare for a thoughtful, focused conversation about the clearest first release.
+                    </p>
 
-                    <aside className="border border-ink/20 bg-paper p-5 sm:p-6">
-                      <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.16em] text-ink/45">What shaped it</p>
-                      <dl className="mt-5 space-y-4 text-sm">
-                        <div className="border-b border-ink/10 pb-4">
-                          <dt className="text-ink/50">Project</dt>
-                          <dd className="mt-1 font-bold">
-                            {projectTypes.find((item) => item.value === answers.projectType)?.label || "Still to define"}
-                          </dd>
-                        </div>
-                        <div className="border-b border-ink/10 pb-4">
-                          <dt className="text-ink/50">Essential needs</dt>
-                          <dd className="mt-1 font-bold">{answers.features.length} selected</dd>
-                        </div>
-                        <div>
-                          <dt className="text-ink/50">Your budget signal</dt>
-                          <dd className="mt-1 font-bold">{budgetOptions[answers.budgetIndex].label}</dd>
-                        </div>
-                      </dl>
-                    </aside>
+                    <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                      <div className="border border-ink/15 p-4">
+                        <p className="text-sm text-ink/50">Project</p>
+                        <p className="mt-1 font-bold">
+                          {projectTypes.find((item) => item.value === answers.projectType)?.label || "Still to define"}
+                        </p>
+                      </div>
+                      <div className="border border-ink/15 p-4">
+                        <p className="text-sm text-ink/50">Who it is for</p>
+                        <p className="mt-1 font-bold">{answers.audience || "Still to define"}</p>
+                      </div>
+                      <div className="border border-ink/15 p-4">
+                        <p className="text-sm text-ink/50">First-release priorities</p>
+                        <p className="mt-1 font-bold">{answers.features.length} selected</p>
+                      </div>
+                      <div className="border border-ink/15 p-4">
+                        <p className="text-sm text-ink/50">Timing</p>
+                        <p className="mt-1 font-bold">{answers.timeline || "Still to define"}</p>
+                      </div>
+                    </div>
                   </div>
 
                   <section className="mt-8 border border-ink/20 bg-signal/35 p-5 sm:p-6" aria-label="Send your project brief" aria-live="polite">
@@ -389,7 +447,7 @@ export function BuildQuestionnaire() {
                         type="button"
                         onClick={() => void submitBrief()}
                         disabled={submissionState === "sending"}
-                        className="mt-6 inline-flex min-h-12 items-center gap-2 border border-ink bg-ink px-5 text-sm font-bold text-paper transition hover:bg-cobalt disabled:cursor-wait disabled:bg-ink/60"
+                        className="mt-6 inline-flex min-h-12 items-center gap-2 border border-cobalt bg-cobalt px-5 text-sm font-bold text-paper transition hover:bg-cobalt/85 disabled:cursor-wait disabled:border-ink/20 disabled:bg-ink/20 disabled:text-ink/45"
                       >
                         {submissionState === "sending" ? "Sending your brief…" : "Send brief"}
                         <ArrowRight className="size-4" aria-hidden="true" />
@@ -404,7 +462,7 @@ export function BuildQuestionnaire() {
                   <button
                     type="button"
                     onClick={back}
-                    className="mt-8 inline-flex min-h-12 items-center gap-2 border border-ink bg-paper px-4 text-sm font-bold transition hover:bg-ink hover:text-paper"
+                    className="mt-8 inline-flex min-h-12 items-center gap-2 border border-ink/25 bg-paper px-4 text-sm font-bold transition hover:border-cobalt hover:bg-signal/35"
                   >
                     <ArrowLeft className="size-4" aria-hidden="true" />
                     Adjust my brief
@@ -452,7 +510,7 @@ export function BuildQuestionnaire() {
                         placeholder="For example: I want to make it simpler for…"
                         className={cn(fieldClassName, "resize-y leading-6")}
                       />
-                      <p className="mt-2 text-sm text-ink/45">{answers.idea.trim().length}/12 characters minimum</p>
+                      <p className="mt-2 text-sm text-ink/45">A few words are enough to continue. The details can come later.</p>
                       <SuggestionChips
                         items={["It helps people do this faster.", "It replaces a messy manual process.", "I want an easier first experience for customers."]}
                         onSelect={updateIdeaFromSuggestion}
@@ -581,6 +639,7 @@ export function BuildQuestionnaire() {
                             <CircleDollarSign className="size-6" aria-hidden="true" />
                           </span>
                         </div>
+                        <p className="mt-7 text-sm text-ink/55">Drag the handle or choose the closest range below.</p>
                         <input
                           type="range"
                           min="0"
@@ -588,16 +647,22 @@ export function BuildQuestionnaire() {
                           step="1"
                           value={answers.budgetIndex}
                           onChange={(event) => setValue("budgetIndex", Number(event.target.value))}
-                          className="mt-8 h-3 w-full cursor-pointer accent-cobalt"
+                          className="mt-4 h-4 w-full cursor-pointer accent-cobalt"
                           aria-label="Project budget range"
+                          aria-valuetext={budgetOptions[answers.budgetIndex].label}
                         />
-                        <div className="mt-3 grid grid-cols-5 gap-1 text-center text-[0.62rem] font-bold leading-3 text-ink/45 sm:text-xs">
+                        <div className="mt-5 flex flex-wrap gap-2" aria-label="Choose a project budget range">
                           {budgetOptions.map((option, index) => (
                             <button
                               type="button"
                               key={option.label}
                               onClick={() => setValue("budgetIndex", index)}
-                              className={cn("p-1 transition hover:text-ink", index === answers.budgetIndex && "text-cobalt")}
+                              className={cn(
+                                "min-h-10 whitespace-nowrap border px-3 text-xs font-bold transition sm:text-sm",
+                                index === answers.budgetIndex
+                                  ? "border-cobalt bg-cobalt text-paper"
+                                  : "border-ink/20 bg-paper text-ink/65 hover:border-cobalt hover:bg-signal/30"
+                              )}
                             >
                               {option.label}
                             </button>
@@ -647,6 +712,21 @@ export function BuildQuestionnaire() {
                             className={cn(fieldClassName, "mt-2")}
                           />
                         </label>
+                        <label className="block text-sm font-bold sm:col-span-2">
+                          WhatsApp number <span className="font-normal text-ink/40">(optional)</span>
+                          <input
+                            type="tel"
+                            inputMode="tel"
+                            value={answers.whatsappNumber}
+                            onChange={(event) => setValue("whatsappNumber", event.target.value)}
+                            autoComplete="tel"
+                            placeholder="Include country code, for example +1 555 123 4567"
+                            className={cn(fieldClassName, "mt-2")}
+                          />
+                          <span className="mt-2 block text-xs font-normal text-ink/45">
+                            Add this only if you would like a WhatsApp follow-up.
+                          </span>
+                        </label>
                       </div>
                       <fieldset className="mt-6">
                         <legend className="text-sm font-bold">Preferred follow-up</legend>
@@ -661,7 +741,7 @@ export function BuildQuestionnaire() {
                           ))}
                         </div>
                       </fieldset>
-                      <label className="mt-6 flex cursor-pointer gap-3 border border-ink/15 bg-white/35 p-4 text-sm leading-5">
+                      <label className="mt-6 flex cursor-pointer gap-3 border border-ink/15 bg-paper p-4 text-sm leading-5">
                         <input
                           type="checkbox"
                           checked={answers.consent}
@@ -677,8 +757,8 @@ export function BuildQuestionnaire() {
             </AnimatePresence>
           </div>
 
-          {!isComplete ? (
-            <div className="z-20 border-t border-ink/15 bg-paper/95 px-5 py-4 backdrop-blur sm:px-10 lg:px-16">
+        {!isComplete ? (
+            <div className="sticky bottom-0 z-20 border-t border-ink/15 bg-paper px-5 py-4 sm:px-10 lg:px-16">
               <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
                 <button
                   type="button"
@@ -694,16 +774,15 @@ export function BuildQuestionnaire() {
                   onClick={next}
                   disabled={!canContinue()}
                   data-testid="questionnaire-next"
-                  className="inline-flex min-h-12 items-center gap-2 border border-ink bg-ink px-5 text-sm font-bold text-paper transition hover:bg-cobalt disabled:cursor-not-allowed disabled:border-ink/20 disabled:bg-ink/20 disabled:text-ink/45"
+                  className="inline-flex min-h-12 items-center gap-2 border border-cobalt bg-cobalt px-5 text-sm font-bold text-paper transition hover:bg-cobalt/85 disabled:cursor-not-allowed disabled:border-ink/20 disabled:bg-ink/20 disabled:text-ink/45"
                 >
-                  {step === QUESTION_COUNT - 1 ? "See my planning range" : "Continue"}
+                  {step === QUESTION_COUNT - 1 ? "Review my brief" : "Continue"}
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </button>
               </div>
             </div>
           ) : null}
         </div>
-      </div>
     </main>
   );
 }

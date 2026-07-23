@@ -48,6 +48,7 @@ type Answers = {
   budgetIndex: number;
   fullName: string;
   email: string;
+  whatsappNumber: string;
   company: string;
   contactMethod: "Email" | "WhatsApp";
 };
@@ -104,6 +105,7 @@ function parseAnswers(value: unknown): Answers | null {
     !isSafeText(answers.fullName, 120, true) ||
     typeof answers.email !== "string" ||
     !emailPattern.test(answers.email.trim()) ||
+    !isSafeText(answers.whatsappNumber, 40) ||
     !isSafeText(answers.company, 160) ||
     !isAllowedValue(answers.contactMethod, ["Email", "WhatsApp"])
   ) {
@@ -121,6 +123,7 @@ function parseAnswers(value: unknown): Answers | null {
     budgetIndex: answers.budgetIndex as number,
     fullName: answers.fullName.trim(),
     email: answers.email.trim().toLowerCase(),
+    whatsappNumber: answers.whatsappNumber.trim(),
     company: answers.company.trim(),
     contactMethod: answers.contactMethod as Answers["contactMethod"]
   };
@@ -162,6 +165,7 @@ function renderEmail(brief: Answers & { id: string }) {
   const fields = [
     ["Client", brief.fullName],
     ["Email", brief.email],
+    ["WhatsApp", brief.whatsappNumber || "Not provided"],
     ["Company", brief.company || "Not provided"],
     ["Preferred follow-up", brief.contactMethod],
     ["Project", brief.projectType],
@@ -232,6 +236,7 @@ Deno.serve(async (request) => {
     body: JSON.stringify({
       full_name: answers.fullName,
       email: answers.email,
+      whatsapp_number: answers.whatsappNumber || null,
       company: answers.company || null,
       contact_method: answers.contactMethod,
       project_type: answers.projectType,

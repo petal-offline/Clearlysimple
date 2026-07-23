@@ -83,6 +83,7 @@ export type QuestionnaireAnswers = {
   budgetIndex: number;
   fullName: string;
   email: string;
+  whatsappNumber: string;
   company: string;
   contactMethod: (typeof contactMethods)[number];
   consent: boolean;
@@ -99,30 +100,10 @@ export const initialAnswers: QuestionnaireAnswers = {
   budgetIndex: 2,
   fullName: "",
   email: "",
+  whatsappNumber: "",
   company: "",
   contactMethod: "Email",
   consent: false
 };
-
-const planningRanges: Record<ProjectType | "not-sure", [number, number]> = {
-  "mobile-app": [15, 30],
-  website: [4, 9],
-  "web-app": [12, 26],
-  "app-and-site": [24, 48],
-  "not-sure": [8, 22]
-};
-
-export function getPlanningEstimate(answers: Pick<QuestionnaireAnswers, "projectType" | "features">) {
-  const [baseLow, baseHigh] = planningRanges[answers.projectType || "not-sure"];
-  const featureAddition = answers.features.length >= 4 ? 10 : answers.features.length >= 2 ? 5 : 0;
-  const low = baseLow + featureAddition;
-  const high = baseHigh + featureAddition;
-
-  return {
-    low,
-    high,
-    label: `$${low}k–$${high}k`
-  };
-}
 
 export const QUESTION_COUNT = 9;

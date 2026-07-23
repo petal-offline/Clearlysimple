@@ -5,6 +5,7 @@ create table if not exists public.project_briefs (
   created_at timestamptz not null default now(),
   full_name text not null,
   email text not null,
+  whatsapp_number text,
   company text,
   contact_method text not null check (contact_method in ('Email', 'WhatsApp')),
   project_type text not null,

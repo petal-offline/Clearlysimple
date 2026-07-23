@@ -3,8 +3,7 @@ import { BuildQuestionnaire } from "@/app/build-with-me/_components/build-questi
 
 export const metadata: Metadata = {
   title: "Build with me",
-  description:
-    "Tell ClearlySimple about your product idea and receive a preliminary planning range for your project."
+  description: "Tell ClearlySimple about your product idea and start a focused project conversation."
 };
 
 export default function BuildWithMePage() {
