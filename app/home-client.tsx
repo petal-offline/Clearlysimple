@@ -1021,7 +1021,7 @@ const footerGroups = [
       },
       {
         title: "Email",
-        href: "mailto:clearlysimple.apps@gmail.com",
+        href: "mailto:hello@clearlysimple.app",
         icon: Mail
       }
     ]
