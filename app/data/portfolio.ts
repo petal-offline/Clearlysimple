@@ -22,7 +22,7 @@ export const portfolioApps: PortfolioApp[] = [
       "A privacy-first period tracker built as an offline mobile utility with polished UX and subscription-ready systems.",
     role: "Offline wellness utility",
     stage: "Live product",
-    stack: ["Period tracker", "Mobile UI/UX", "Antigravity + Codex", "Figma + RevenueCat"],
+    stack: ["Period tracking", "Mobile UI/UX", "Offline-first", "Subscription systems"],
     signal: "Private utility",
     accent: "signal"
   },
@@ -56,27 +56,37 @@ export const portfolioApps: PortfolioApp[] = [
   }
 ];
 
-export const aiStack = [
-  "Codex",
-  "Antigravity",
-  "Google Build Studio",
-  "Perplexity",
-  "Figma",
-  "Mobbin",
-  "Firebase",
-  "GitHub",
-  "RevenueCat",
-  "Stable Diffusion"
+export const serviceSignals = [
+  "Mobile product development",
+  "Product strategy and UX",
+  "Reliable app architecture",
+  "Subscriptions and monetization",
+  "Launch websites and product polish",
+  "Clear, dependable delivery"
 ];
 
-export const serviceSignals = [
-  "AI-integrated app development",
-  "Mobile MVP execution",
-  "Firebase-backed architecture",
-  "Subscription app systems",
-  "Launch-ready product polish",
-  "Enterprise-grade delivery habits"
-];
+export const landingFaqItems = [
+  {
+    question: "What kind of apps does ClearlySimple build?",
+    answer:
+      "ClearlySimple builds mobile apps, focused utilities, consumer products, and launch websites that are clear, useful, and ready to grow."
+  },
+  {
+    question: "How does a project start?",
+    answer:
+      "We begin with the problem, the essential scope, and a practical plan for getting the right product in front of users."
+  },
+  {
+    question: "Can ClearlySimple work with an existing team?",
+    answer:
+      "Yes. ClearlySimple can work alongside founders, designers, and internal teams with clear communication and a shared delivery plan."
+  },
+  {
+    question: "Which products has ClearlySimple built?",
+    answer:
+      "The portfolio currently includes Petal Chan, an offline period tracker, Deposition Timer, a legal timekeeping utility for litigators, and KeepDM, a private offline viewer for Instagram data exports. I have also worked with separate clients on business and SaaS apps."
+  }
+] as const;
 
 export const homeFaqItems = [
   {

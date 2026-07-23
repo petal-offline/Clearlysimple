@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { Inter } from "next/font/google";
 import { CinematicFooter } from "@/components/ui/motion-footer";
+import { depositionSite } from "@/app/deposition-timer/_data/site";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -39,7 +40,7 @@ export default function DepositionTimerLayout({
       <main className="relative z-10 min-h-[120vh] w-full rounded-b-[2rem] border-b border-white/10 bg-[#070a0f] shadow-[0_28px_80px_rgba(0,0,0,0.38)]">
         {children}
       </main>
-      <CinematicFooter />
+      <CinematicFooter downloadHref={depositionSite.iosDownloadUrl} />
     </div>
   );
 }

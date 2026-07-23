@@ -23,15 +23,9 @@ import {
   useSpring,
   useTransform
 } from "framer-motion";
-import {
-  GlobeInteractive,
-  type InteractiveMarker
-} from "@/components/ui/cobe-globe-interactive";
-import CornerFrameScrambleText from "@/components/ui/corner-frame-scramble-text";
 import { StickyScroll, type StickyScrollItem } from "@/components/ui/sticky-scroll-reveal";
 import {
-  aiStack,
-  homeFaqItems,
+  landingFaqItems,
   portfolioApps,
   serviceSignals,
   type PortfolioApp
@@ -263,8 +257,8 @@ function Header() {
   const headerVisible = useHeaderVisibility();
   const links = [
     ["Work", "#work"],
-    ["Stack", "#stack"],
-    ["Portrait", "#portrait"],
+    ["Services", "#services"],
+    ["About", "#portrait"],
     ["Contact", "#contact"]
   ];
 
@@ -300,8 +294,8 @@ function Header() {
           ))}
         </div>
         <a
-          href="mailto:hello@clearlysimple.app?subject=Build%20with%20Ayush"
-          aria-label="Email Ayush Mishra"
+          href="/build-with-me"
+          aria-label="Start a project questionnaire"
           className="group relative hidden h-10 min-w-12 items-center justify-center gap-2 overflow-hidden border border-ink bg-ink px-4 text-sm font-bold text-paper transition-colors duration-150 md:inline-flex"
         >
           <span className="absolute inset-0 -translate-x-[102%] bg-signal transition-transform duration-100 ease-out group-hover:translate-x-0" aria-hidden="true" />
@@ -493,7 +487,7 @@ function Hero() {
   return (
     <section
       id="top"
-      aria-label="Ayush Mishra limitless app builder portfolio hero"
+      aria-label="Ayush Mishra app developer portfolio hero"
       className="relative min-h-[88svh] overflow-hidden border-b border-ink/10 bg-paper pt-16 md:min-h-[92svh] md:pt-20"
     >
       <motion.div
@@ -518,10 +512,10 @@ function Hero() {
             >
               Ayush Mishra
             </motion.p>
-            <SplitHeadline text="Limitless Builds" />
+            <SplitHeadline text="Built to ship." />
             <p className="mt-6 max-w-3xl text-balance text-lg font-semibold leading-7 text-ink/78 sm:text-xl sm:leading-8 md:mt-8 md:text-3xl md:leading-10">
               <StaggeredWords
-                text="I design and engineer mobile products without ceiling: polished utilities, finance tools, consumer apps, and launch-ready systems built to feel fast, native, and durable."
+                text="I design and engineer mobile products that feel intentional and durable—from private utilities to consumer apps and specialized workflows."
                 delay={0.28}
                 stagger={0.012}
               />
@@ -551,8 +545,8 @@ function Hero() {
             About me
           </MotionLink>
           <MotionLink
-            href="mailto:hello@clearlysimple.app?subject=Build%20with%20Ayush"
-            aria-label="Hire Ayush Mishra for an app build"
+            href="/build-with-me"
+            aria-label="Start a project questionnaire"
             className="group relative col-span-2 inline-flex h-12 items-center justify-center gap-2 overflow-hidden border border-ink bg-ink px-5 font-bold text-paper transition-colors duration-150 md:col-span-1 md:shadow-hard-sm"
           >
             <span className="absolute inset-0 -translate-x-full bg-signal transition-transform duration-100 ease-out group-hover:translate-x-0" aria-hidden="true" />
@@ -568,14 +562,14 @@ function Hero() {
 function TrustStrip() {
   return (
     <MotionSection
-      ariaLabel="AI app developer positioning for enterprise and high value clients"
+      ariaLabel="Product delivery principles"
       className="py-10 md:py-16"
     >
       <div className="grid border border-ink bg-paper md:grid-cols-3">
         {[
-          ["01", "Fast execution", "AI-native build systems compress research, product thinking, and implementation cycles."],
-          ["02", "Scalable judgment", "Architecture, subscriptions, Firebase, and launch paths are considered from the first build."],
-          ["03", "Premium polish", "Interfaces are designed to feel decisive, clean, and trustworthy across phone and desktop."]
+          ["01", "Clear product focus", "Each engagement starts with the user problem, the core flow, and the work required to make it useful."],
+          ["02", "Reliable delivery", "Architecture, data, and launch details are considered early so the product has room to grow."],
+          ["03", "Polished experience", "Interfaces are built to feel clear, responsive, and trustworthy across the moments that matter."]
         ].map(([number, title, body]) => (
           <article key={title} className="border-b border-ink p-6 md:border-b-0 md:border-r md:last:border-r-0">
             <span className="font-mono text-xs font-bold text-cobalt">{number}</span>
@@ -586,12 +580,6 @@ function TrustStrip() {
           </article>
         ))}
       </div>
-      <p className="sr-only">
-        Ayush Mishra is positioned for best AI app developer for hire, top
-        freelance mobile developer, enterprise app developer, AI product
-        engineer, and high-velocity mobile MVP execution across California, New
-        York, Texas, London, Europe, Sydney, Melbourne, and Australia.
-      </p>
     </MotionSection>
   );
 }
@@ -622,7 +610,7 @@ function PortraitFeature() {
             />
             <motion.img
               src="/ayush-portrait.webp"
-              alt="Portrait of Ayush Mishra, AI-integrated app developer and digital engineer"
+              alt="Portrait of Ayush Mishra, mobile app developer and digital engineer"
               className={cn(
                 "relative z-10 mx-auto h-full max-h-full w-full max-w-full object-contain object-bottom text-transparent saturate-110 drop-shadow-[0_28px_48px_rgba(0,0,0,0.5)]",
                 imageFailed && "hidden"
@@ -659,20 +647,19 @@ function PortraitFeature() {
               Operator profile
             </p>
             <h2 className="mt-7 max-w-3xl font-display text-4xl font-bold uppercase leading-[0.92] sm:text-5xl md:mt-8 md:text-7xl md:leading-[0.9]">
-              Young enough to move fast. Serious enough to ship clean.
+              Move fast. Ship clean.
             </h2>
           </div>
           <div className="grid md:grid-cols-2">
             <div className="border-b border-ink p-6 md:border-b-0 md:border-r md:p-8">
               <p className="text-base leading-7 text-ink/75 sm:text-lg sm:leading-8">
-                I use AI as leverage, not as a shortcut. The work is structured,
-                reviewed, tested, and pushed toward outcomes that hiring
-                managers, founders, and premium clients can trust.
+                Every project is shaped around a clear scope, thoughtful
+                implementation, and testing that earns confidence before launch.
               </p>
             </div>
             <div className="p-6 md:p-8">
               <div className="grid grid-cols-2 border border-ink">
-                {["Apps", "AI", "Mobile", "Launch"].map((item) => (
+                {["Strategy", "Build", "Mobile", "Launch"].map((item) => (
                   <div
                     key={item}
                     className="grid aspect-square place-items-center border-b border-r border-ink text-center font-display text-xl font-bold last:border-r-0 even:border-r-0 [&:nth-last-child(-n+2)]:border-b-0"
@@ -683,46 +670,6 @@ function PortraitFeature() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </MotionSection>
-  );
-}
-
-function StackSection() {
-  return (
-    <MotionSection
-      id="stack"
-      ariaLabel="AI and software stack used by Ayush Mishra"
-      className="py-12 md:py-16"
-    >
-      <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
-        <div>
-          <p className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-cobalt">
-            Toolchain
-          </p>
-          <h2 className="mt-6 font-display text-4xl font-bold uppercase leading-[0.92] sm:text-5xl md:text-7xl md:leading-[0.9]">
-            AI leveraged where speed matters.
-          </h2>
-        </div>
-        <div className="grid grid-cols-2 border border-ink bg-paper lg:grid-cols-3">
-          {aiStack.map((tool, index) => (
-            <motion.div
-              key={tool}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: index * 0.035, ease }}
-              className="group flex min-h-28 flex-col justify-between border-b border-r border-ink p-3 [&:nth-child(2n)]:border-r-0 sm:min-h-32 sm:p-4 lg:[&:nth-child(2n)]:border-r lg:[&:nth-child(3n)]:border-r-0"
-            >
-              <span className="font-mono text-xs text-ink/40">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <span className="break-words font-display text-xl font-bold leading-none transition-transform duration-300 group-hover:-translate-y-1 sm:text-2xl">
-                {tool}
-              </span>
-            </motion.div>
-          ))}
         </div>
       </div>
     </MotionSection>
@@ -907,7 +854,7 @@ function AppShowcase() {
         title: app.name,
         kicker: app.status,
         description: `${app.summary} ${app.role}.`,
-        content: <AppVisual app={app} />
+        content: <AppVisual app={app} compact />
       })),
     []
   );
@@ -930,13 +877,12 @@ function AppShowcase() {
               Portfolio
             </p>
             <h2 className="mt-5 font-display text-4xl font-bold uppercase leading-[0.92] text-ink sm:text-5xl md:text-8xl md:leading-[0.9]">
-              Built and building.
+              Built to ship.
             </h2>
           </div>
           <p className="max-w-2xl text-base leading-7 text-ink/70 sm:text-lg sm:leading-8">
-            A focused app portfolio with live proof, in-progress execution, and a
-            clean data model for adding future launches without redesigning the
-            section.
+            Three live products across wellness, legal workflows, and private
+            chat archives.
           </p>
         </div>
       </div>
@@ -961,18 +907,18 @@ function ServiceSection() {
 
   return (
     <MotionSection
+      id="services"
       ariaLabel="Services offered by ClearlySimple"
       className="py-12 md:py-16"
     >
       <div className="border border-paper/20 bg-ink text-paper shadow-hard-lg">
         <div className="grid gap-8 border-b border-paper/15 p-6 md:p-8 lg:grid-cols-[1fr_1.2fr]">
           <h2 className="font-display text-4xl font-bold uppercase leading-[0.92] sm:text-5xl md:text-8xl md:leading-[0.9]">
-            What serious clients hire me for.
+            What clients hire me for.
           </h2>
           <p className="max-w-2xl text-base leading-7 text-paper/72 sm:text-lg sm:leading-8">
-            I am tuned for clients who need momentum: enterprise hiring
-            managers, founders, and high-net-worth operators who want apps that
-            move from idea to working product quickly.
+            From an initial idea to a product ready for release: clear
+            priorities, working software, and thoughtful details.
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3">
@@ -993,142 +939,6 @@ function ServiceSection() {
           })}
         </div>
       </div>
-    </MotionSection>
-  );
-}
-
-const remoteMarkers: InteractiveMarker[] = [
-  {
-    id: "usa",
-    location: [39.8, -98.6]
-  },
-  {
-    id: "uk",
-    location: [51.5, -0.12]
-  },
-  {
-    id: "aus",
-    location: [-25.3, 133.8]
-  },
-  {
-    id: "europe",
-    location: [50.1, 10.5]
-  },
-  {
-    id: "africa",
-    location: [1.6, 20.9]
-  },
-  {
-    id: "russia",
-    location: [61.5, 105.3]
-  },
-  {
-    id: "india",
-    location: [20.6, 78.9]
-  },
-  {
-    id: "china",
-    location: [35.9, 104.2]
-  },
-  {
-    id: "brazil",
-    location: [-14.2, -51.9]
-  },
-  {
-    id: "japan",
-    location: [36.2, 138.2]
-  }
-];
-
-function GeoSection() {
-  const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll();
-  const backgroundY = useTransform(scrollYProgress, [0.46, 1], [reduceMotion ? 0 : 70, reduceMotion ? 0 : -65]);
-  const taglineY = useTransform(scrollYProgress, [0.48, 1], [reduceMotion ? 0 : 34, reduceMotion ? 0 : -28]);
-  const taglineWords = ["Limitless", "Execution"];
-
-  return (
-    <MotionSection
-      ariaLabel="International project coverage by ClearlySimple"
-      className="py-12 md:py-16"
-    >
-      <div className="grid gap-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
-        <div className="text-paper lg:sticky lg:top-24">
-          <p className="font-display text-xs font-bold uppercase tracking-[0.24em] text-signal">
-            International build mode
-          </p>
-          <h2 className="mt-6 font-display text-4xl font-bold uppercase leading-[0.92] sm:text-5xl md:text-7xl md:leading-[0.9]">
-            I build for clients across the world.
-          </h2>
-          <p className="mt-6 max-w-xl text-base font-medium leading-7 text-paper/70 sm:text-lg sm:leading-8">
-            I keep the process clear across time zones: crisp scopes, fast
-            builds, direct updates, and product decisions that make sense for
-            international teams, founders, and operators.
-          </p>
-        </div>
-        <div className="relative isolate overflow-hidden border border-paper/20 bg-ink px-4 py-8 shadow-hard-lg sm:px-8 md:px-10 md:py-10">
-          <motion.p
-            aria-hidden="true"
-            style={{ y: taglineY }}
-            className="pointer-events-none absolute inset-x-0 top-8 z-0 flex flex-wrap justify-center gap-x-[0.14em] px-3 text-center font-display text-[clamp(3.35rem,15vw,12.5rem)] font-bold uppercase leading-none tracking-normal text-paper/[0.055] will-change-transform sm:top-4"
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  staggerChildren: 0.12
-                }
-              }
-            }}
-            initial={reduceMotion ? false : "hidden"}
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-          >
-            {taglineWords.map((word) => (
-              <motion.span
-                key={word}
-                className="inline-block"
-                variants={wordReveal}
-                transition={{ duration: 0.85, ease }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </motion.p>
-          <motion.div
-            aria-hidden="true"
-            style={{ y: backgroundY }}
-            className="absolute inset-x-4 bottom-8 top-20 z-0 border border-paper/10 bg-grid-lines bg-[length:56px_56px] opacity-20"
-          />
-          <GlobeInteractive
-            markers={remoteMarkers}
-            speed={0.0024}
-            className="relative z-10 mx-auto w-full max-w-[23rem] sm:max-w-[30rem]"
-          />
-          <div className="relative z-10 mt-6 grid gap-5 border border-paper/20 p-5 sm:grid-cols-[auto_1fr] sm:items-end sm:p-6">
-            <CornerFrameScrambleText
-              value="160+"
-              as="strong"
-              className="[--foreground:#f6f1e8] font-display text-[clamp(4rem,18vw,8.75rem)] font-bold uppercase leading-none text-paper"
-            />
-            <div className="pb-2">
-              <p className="font-display text-xs font-bold uppercase tracking-[0.2em] text-signal">
-                Worldwide project range
-              </p>
-              <p className="mt-3 max-w-sm text-sm font-semibold leading-6 text-paper/70">
-                I support apps, AI tools, fintech utilities, dashboards,
-                automations, launch websites, and experimental builds for
-                clients from all across the world.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p className="sr-only">
-        ClearlySimple works internationally across project categories including
-        mobile apps, AI products, fintech utilities, internal dashboards,
-        automations, launch websites, and experimental builds for clients across
-        North America, Europe, Australia, Africa, Asia, Latin America, and more.
-      </p>
     </MotionSection>
   );
 }
@@ -1155,7 +965,7 @@ function HomeFaqSection() {
         </div>
 
         <div className="grid gap-3">
-          {homeFaqItems.map((item, index) => (
+          {landingFaqItems.map((item, index) => (
             <article
               key={item.question}
               className="border border-paper/15 bg-paper/[0.03] p-5"
@@ -1181,7 +991,7 @@ function ClosingCta() {
   return (
     <section
       id="contact"
-      aria-label="Contact Ayush Mishra for AI app development"
+      aria-label="Contact Ayush Mishra about app development"
       className="bg-ink px-5 py-20 text-paper md:px-8 md:py-28"
     >
       <div className="mx-auto max-w-7xl">
@@ -1191,12 +1001,12 @@ function ClosingCta() {
               ClearlySimple
             </p>
             <h2 className="mt-6 max-w-5xl font-display text-4xl font-bold uppercase leading-[0.9] sm:text-5xl md:text-8xl md:leading-[0.86]">
-              Work with me if you want tomorrow&apos;s stack built into something real.
+              Have a product worth shipping?
             </h2>
           </div>
           <MotionLink
-            href="mailto:hello@clearlysimple.app?subject=AI%20app%20development%20with%20Ayush%20Mishra"
-            aria-label="Email ClearlySimple about AI app development"
+            href="/build-with-me"
+            aria-label="Start a project questionnaire"
             className="inline-flex h-14 w-full items-center justify-center gap-3 border border-paper bg-paper px-6 font-bold text-ink transition-transform duration-75 hover:-translate-y-1 sm:w-auto"
           >
             Start a build
@@ -1219,7 +1029,7 @@ const footerGroups = [
       },
       {
         title: "Email",
-        href: "mailto:hello@clearlysimple.app",
+        href: "mailto:clearlysimple.apps@gmail.com",
         icon: Mail
       }
     ]
@@ -1252,11 +1062,6 @@ const footerGroups = [
         href: "https://instagram.com/ayushmishraog",
         icon: Instagram
       },
-      {
-        title: "Reddit u/ayushmishraog",
-        href: "https://www.reddit.com/user/ayushmishraog",
-        logo: "https://cdn.simpleicons.org/reddit/FF4500"
-      }
     ]
   },
   {
@@ -1307,7 +1112,6 @@ function FooterSection() {
                 <ul className="mt-4 space-y-3">
                   {group.links.map((link) => {
                     const Icon = "icon" in link ? link.icon : undefined;
-                    const logo = "logo" in link ? link.logo : undefined;
 
                     return (
                       <li key={link.title}>
@@ -1319,14 +1123,6 @@ function FooterSection() {
                         >
                           {Icon ? (
                             <Icon className="size-4 shrink-0 text-signal transition-transform duration-75 group-hover:-translate-y-0.5" aria-hidden="true" />
-                          ) : logo ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              src={logo}
-                              alt=""
-                              className="size-4 shrink-0 object-contain transition-transform duration-75 group-hover:-translate-y-0.5"
-                              loading="lazy"
-                            />
                           ) : null}
                           {link.title}
                         </a>
@@ -1355,20 +1151,12 @@ export default function Home() {
       <Header />
       <Hero />
       <TrustStrip />
-      <PortraitFeature />
-      <StackSection />
       <AppShowcase />
       <ServiceSection />
-      <GeoSection />
+      <PortraitFeature />
       <HomeFaqSection />
       <ClosingCta />
       <FooterSection />
-      <span className="sr-only">
-        Ayush Mishra, founder of ClearlySimple, is an AI-integrated app
-        developer for hire, freelance mobile developer, digital engineer,
-        Firebase developer, RevenueCat implementation builder, and AI product
-        engineer for enterprise clients and premium global markets.
-      </span>
     </main>
   );
 }

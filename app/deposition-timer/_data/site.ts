@@ -11,7 +11,7 @@ export const depositionSite = {
   supportEmail: "support@clearlysimple.app",
   supportHref:
     "mailto:support@clearlysimple.app?subject=Deposition%20Timer%20support",
-  iosDownloadUrl: "/deposition-timer/#pricing",
+  iosDownloadUrl: "https://apps.apple.com/us/app/deposition-timer/id6784677621",
   androidDownloadUrl: "/deposition-timer/#pricing",
   price: "49.99",
   priceCurrency: "USD",

@@ -10,6 +10,7 @@ const display = Space_Grotesk({
 });
 
 const siteUrl = SITE_URL;
+const socialPreviewImage = "/clearlysimple-social-preview.png";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -62,10 +63,10 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/ayush-portrait.webp",
-        width: 1122,
-        height: 1402,
-        alt: "Portrait of Ayush Mishra"
+        url: socialPreviewImage,
+        width: 1730,
+        height: 909,
+        alt: "ClearlySimple — Limitless Builds"
       }
     ]
   },
@@ -74,7 +75,7 @@ export const metadata: Metadata = {
     title: "Ayush Mishra | ClearlySimple",
     description:
       "AI-integrated app developer and digital engineer building scalable apps with modern AI workflows.",
-    images: ["/ayush-portrait.webp"]
+    images: [socialPreviewImage]
   },
   robots: {
     index: true,

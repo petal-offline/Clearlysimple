@@ -90,7 +90,7 @@ export default function FaqPage() {
         </div>
 
         <a
-          href="mailto:hello@clearlysimple.app?subject=Project%20question"
+          href="mailto:clearlysimple.apps@gmail.com?subject=Project%20question"
           className="mt-8 inline-flex h-12 items-center gap-2 border border-ink bg-ink px-5 font-bold text-paper"
         >
           Email ClearlySimple

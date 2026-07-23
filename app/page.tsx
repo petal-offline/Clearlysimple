@@ -1,4 +1,4 @@
-import { homeFaqItems } from "@/app/data/portfolio";
+import { landingFaqItems } from "@/app/data/portfolio";
 import HomeClient from "@/app/home-client";
 import { SITE_LAST_MODIFIED, SITE_URL } from "@/app/seo";
 
@@ -10,7 +10,7 @@ const homepageJsonLd = [
     url: SITE_URL,
     name: "Ayush Mishra | ClearlySimple",
     description:
-      "Personal portfolio and ClearlySimple studio page for Ayush Mishra, focused on app development, mobile product engineering, AI-assisted workflows, and international project execution.",
+      "Personal portfolio and ClearlySimple studio page for Ayush Mishra, focused on mobile app development, product engineering, and practical product delivery.",
     isPartOf: {
       "@id": `${SITE_URL}/#website`
     },
@@ -30,7 +30,7 @@ const homepageJsonLd = [
     url: SITE_URL,
     name: "ClearlySimple homepage FAQ",
     dateModified: SITE_LAST_MODIFIED,
-    mainEntity: homeFaqItems.map((item) => ({
+    mainEntity: landingFaqItems.map((item) => ({
       "@type": "Question",
       name: item.question,
       acceptedAnswer: {

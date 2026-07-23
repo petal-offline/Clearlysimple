@@ -2,12 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useRef, useState } from "react";
-import {
-  motion,
-  useMotionValueEvent,
-  useReducedMotion,
-  useScroll
-} from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export type StickyScrollItem = {
@@ -38,24 +33,24 @@ export function StickyScroll({
   const [activeCard, setActiveCard] = useState(0);
   const reduceMotion = useReducedMotion();
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  const { scrollYProgress } = useScroll({
-    container: scrollRef,
-    offset: ["start start", "end start"]
-  });
-
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (!content.length) return;
-
-    const breakpoints = content.map((_, index) => index / content.length);
-    const closestBreakpointIndex = breakpoints.reduce((acc, breakpoint, index) => {
-      const distance = Math.abs(latest - breakpoint);
-      return distance < Math.abs(latest - breakpoints[acc]) ? index : acc;
-    }, 0);
-
-    setActiveCard(closestBreakpointIndex);
-  });
 
   if (!content.length) return null;
+
+  const updateActiveCard = () => {
+    const scroller = scrollRef.current;
+    if (!scroller) return;
+
+    const maxScroll = scroller.scrollHeight - scroller.clientHeight;
+    const progress = maxScroll > 0 ? scroller.scrollTop / maxScroll : 0;
+    const nextCard = Math.min(
+      content.length - 1,
+      Math.floor(progress * content.length)
+    );
+
+    setActiveCard((currentCard) =>
+      currentCard === nextCard ? currentCard : nextCard
+    );
+  };
 
   const activeItem = content[Math.min(activeCard, content.length - 1)];
   const activeGradient = panelGradients[activeCard % panelGradients.length];
@@ -77,18 +72,20 @@ export function StickyScroll({
             maxScroll,
             Math.max(0, scroller.scrollTop + event.deltaY)
           );
+          updateActiveCard();
         }
       }}
       className={cn(
-        "relative flex h-[42rem] justify-center overflow-hidden border border-paper/15 p-6 text-paper shadow-hard-lg md:p-10",
+        "relative flex h-[36rem] justify-center overflow-hidden border border-paper/15 p-5 text-paper shadow-hard-lg md:p-6",
         className
       )}
     >
-      <div className="relative flex h-full w-full max-w-6xl items-start gap-10">
+      <div className="relative flex h-full w-full max-w-6xl items-center gap-8">
         <div
           data-work-timeline="true"
           ref={scrollRef}
-          className="h-full w-full max-w-2xl overflow-y-auto overscroll-contain px-1 no-scrollbar md:px-4"
+          onScroll={updateActiveCard}
+          className="h-full w-full max-w-xl overflow-y-auto overscroll-contain px-1 no-scrollbar md:px-4"
         >
           {content.map((item, index) => {
             const isActive = activeCard === index;
@@ -96,7 +93,7 @@ export function StickyScroll({
             return (
               <div
                 key={`${item.title}-${index}`}
-                className="my-24 min-h-44 border-l border-paper/15 pl-5"
+                className="my-16 min-h-40 border-l border-paper/15 pl-5"
               >
                 {item.kicker ? (
                   <motion.p
@@ -123,7 +120,7 @@ export function StickyScroll({
               </div>
             );
           })}
-          <div className="h-44" />
+          <div className="h-24" />
         </div>
 
         <motion.div
@@ -131,7 +128,7 @@ export function StickyScroll({
           animate={reduceMotion ? undefined : { background: activeGradient }}
           style={reduceMotion ? { background: activeGradient } : undefined}
           className={cn(
-            "hidden h-[32rem] w-[30rem] shrink-0 overflow-hidden border border-paper/20 lg:block",
+            "hidden h-[30rem] w-[28rem] shrink-0 overflow-hidden border border-paper/20 lg:block",
             contentClassName
           )}
           layout
